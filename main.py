@@ -11,3 +11,5 @@ for i in range(1,a+1):
     print(i, a)
     k+= i
 print(k)
+
+#이것은 학원 컴퓨터에서 작업한 내용이다. 
