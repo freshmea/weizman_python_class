@@ -4,20 +4,20 @@ print('Hellow world')    #이것은 우리가 만든 첫 코드입니다.
 
 
 
-# 두 숫자를 입력 받아서 계산해 주는 코드입니다.
+#두 숫자를 입력 받아서 계산해 주는 코드입니다.
 
-# number1=0
-# number2=0
-#
-# number1=int(input('첫번째 숫자:'))
-# number2=int(input('두번째 숫자:'))
-#
-# print('첫번째 숫자는:', number1,'두번째 숫자는:', number2)
-# print('두 숫자의 합은 :', number1+number2)
-# print('두 숫자의 곱은 :', number1*number2)
-# print('두 숫자의 나누기는 :', number1/number2)
+number1=0
+number2=0
 
+number1=int(input('첫번째 숫자:'))
+number2=int(input('두번째 숫자:'))
 
+print('첫번째 숫자는:', number1,'두번째 숫자는:', number2)
+print('두 숫자의 합은 :', number1+number2)
+print('두 숫자의 곱은 :', number1*number2)
+print('두 숫자의 나누기는 :', number1/number2)
+
+#이름을 입력 받아서 정보를 출력하는 코드입니다.
 char=input('이름을 입력하세요:')
 print(char+'은 계룡에 살고 있습니다.')
 print(char+'은 30살 입니다.')
