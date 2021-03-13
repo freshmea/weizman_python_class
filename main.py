@@ -1,15 +1,28 @@
-# for i in range(0, 100):
-#     print("아 ", '아', end='')
-#     print('다시 파이썬을 공부해야 하다니... ㄷㄷ', end='', flush=True)
+print('Hellow world')    #이것은 우리가 만든 첫 코드입니다.
+# number1=3.141592
+# number2=6.455213
 
-a=0
-a=input('숫자를 넣어러:\n')
-a=int(a)
-print('1부터 숫자까지 모두 더해서 알려주마')
-k=0
-for i in range(1,a+1):
-    print(i, a)
-    k+= i
-print(k)
 
-#이것은 학원 컴퓨터에서 작업한 내용이다. 
+
+# 두 숫자를 입력 받아서 계산해 주는 코드입니다.
+
+# number1=0
+# number2=0
+#
+# number1=int(input('첫번째 숫자:'))
+# number2=int(input('두번째 숫자:'))
+#
+# print('첫번째 숫자는:', number1,'두번째 숫자는:', number2)
+# print('두 숫자의 합은 :', number1+number2)
+# print('두 숫자의 곱은 :', number1*number2)
+# print('두 숫자의 나누기는 :', number1/number2)
+
+
+char=input('이름을 입력하세요:')
+print(char+'은 계룡에 살고 있습니다.')
+print(char+'은 30살 입니다.')
+print(char+'은 선생닙입니다.')
+print(char+'의 취미는 컴퓨터 입니다.')
+
+
+
