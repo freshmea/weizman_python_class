@@ -1,4 +1,4 @@
-print('Hellow world')    #이것은 우리가 만든 첫 코드입니다.
+print('Hello world')    #이것은 우리가 만든 첫 코드입니다.
 # number1=3.141592
 # number2=6.455213
 
