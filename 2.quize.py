@@ -1,6 +1,22 @@
 import time
+import threading
 
 """이 프로그램은 아주 간단한 퀴즈를 만드는 프로그램입니다."""
+def overtime():
+    global check
+    print('시간초과')
+    check=1
+    pass
+
+def input_timeout(timeout=4.0):
+    timer = threading.Timer(timeout, overtime)
+    astring = 0
+    timer.start()
+    astring = input()
+    timer.cancel()
+    return astring
+
+
 score = 0
 q1=['13+24*2 는 무엇일까요?', '파이 는 무엇일까요?', '파이썬에서 콘솔에 문자를 출력하는 명령어는 무엇일까요?',
     '다음중 물질의 상태가 아닌 것은 무엇 인가요?']
@@ -11,10 +27,12 @@ q3=[[0, 10, 61, 71], [4.23, 3.14, 5.13, 3.15], ['print', 'input', 'get', 'if els
 
 def yesorno(a=0):
     global score
-    a1=int(input())
-    if a1==a:
+    a1=int(input_timeout(timeout=4.0))
+    if a1==a and check==0:
         print('정답입니다!!!!')
         score = score + 1
+    elif a1==a and check==1:
+        print('정답이지만 시간초과예요!!')
     else:
         print('오답입니다!!!!')
     time.sleep(1)
@@ -27,6 +45,7 @@ for a1, a2 in enumerate(q1):
     print(a1+1, '. 번 문제',a2)
     for b1, b2 in enumerate(q3[a1]):
         print('  ', b1+1, ')', b2)
+    check=0
     yesorno(q2[a1])
 
 

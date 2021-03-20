@@ -1,7 +1,3 @@
-e=input('식을 넣으세요:')
-
-print(eval(e))
-
-print(globals())
-print(vars())
-
+import math
+a=math.__doc__
+print(a)

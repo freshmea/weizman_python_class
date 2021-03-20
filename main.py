@@ -6,8 +6,6 @@ print('Hello world')    #이것은 우리가 만든 첫 코드입니다.
 
 #두 숫자를 입력 받아서 계산해 주는 코드입니다.
 
-number1=0
-number2=0
 
 number1=int(input('첫번째 숫자:'))
 number2=int(input('두번째 숫자:'))
