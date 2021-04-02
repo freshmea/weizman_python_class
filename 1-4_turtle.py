@@ -14,10 +14,18 @@ from turtle import goto as 이동
 import random
 import turtle
 import winsound
+import multiprocessing
 
 turtle.shape("turtle")
 
 # 색의 종류 red, orange, yellow, green, blue, indigo, violet
+
+
+def beepsound():
+    winsound.Beep(random.randint(200, 1000), 200)
+    return
+
+
 def 랜덤색():
     색종류 = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet']
     색(색종류[random.randint(0,6)])
@@ -26,6 +34,7 @@ def 랜덤색():
 def 사각형그리기1(횟수):
     """사각형을 그리는 함수"""
     for i in range(횟수):
+        beepsound()
         랜덤색()
         왼쪽(20)
         앞으로(50)
@@ -40,12 +49,14 @@ def 사각형그리기1(횟수):
 
 def 삼각원그리기(a, b):
     for i in range(a):
+        beepsound()
         랜덤색()
         앞으로(b)
         왼쪽(10)
         뒤로(b*2)
         왼쪽(10)
     return
+
 
 
 속도(10)
@@ -57,4 +68,12 @@ def 삼각원그리기(a, b):
 winsound.Beep(440, 200)
 삼각원그리기(20, 100)
 사각형그리기1(20)
+
+t1 = turtle.Turtle()
+t1.shape('turtle')
+t1.shape('turtle')
+t1.pendown
+t1.forward((100))
+t1.right(100)
+
 그대로두세요()
