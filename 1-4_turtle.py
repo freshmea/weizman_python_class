@@ -34,9 +34,15 @@ from turtle import clear as 지우기
 # 그대로두세요()
 import turtle
 turtle.shape("turtle")
-앞으로(100)
-오른쪽(90)
-앞으로(100)
-오른쪽(90)
-앞으로(100)
+for i in range(10):
+    turtle.left(20)
+
+    turtle.forward(50)
+    turtle.left(90)
+    turtle.forward(50)
+    turtle.left(90)
+    turtle.forward(50)
+    turtle.left(90)
+    turtle.forward(50)
+    turtle.left(90)
 
