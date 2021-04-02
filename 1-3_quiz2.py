@@ -36,7 +36,7 @@ q2=[2, 3, 4, 1, 1]
 
 def clac(answer, sol):
     global score
-    if answer == sol:
+    if answer == sol:-
         score = score + 1
         print('정답입니다.')
     else:

@@ -19,7 +19,7 @@ print('''
 a1=int(input())
 if a1==3:
     print('정답입니다!!!!')
-    score=score+1
+    score=score+1-
 else:
     print('오답입니다!!!!')
 time.sleep(1)
