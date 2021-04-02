@@ -13,6 +13,8 @@ from turtle import goto as 이동
 
 import random
 import turtle
+import winsound
+
 turtle.shape("turtle")
 
 # 색의 종류 red, orange, yellow, green, blue, indigo, violet
@@ -46,12 +48,13 @@ def 삼각원그리기(a, b):
     return
 
 
-속도(1)
+속도(10)
 그만그려()
 이동(0, 300)
 
 
 그려()
+winsound.Beep(440, 200)
 삼각원그리기(20, 100)
 사각형그리기1(20)
 그대로두세요()
