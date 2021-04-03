@@ -18,8 +18,8 @@ class ConnectPage(GridLayout):
         self.cols = 2  # used for our grid
 
         # Read settings from text file, or use empty strings
-        if os.path.isfile("prev_details.txt"):
-            with open("prev_details.txt","r") as f:
+        if os.path.isfile("../prev_details.txt"):
+            with open("../prev_details.txt", "r") as f:
                 d = f.read().split(",")
                 prev_ip = d[0]
                 prev_port = d[1]
@@ -51,7 +51,7 @@ class ConnectPage(GridLayout):
         port = self.port.text
         ip = self.ip.text
         username = self.username.text
-        with open("prev_details.txt","w") as f:
+        with open("../prev_details.txt", "w") as f:
             f.write(f"{ip},{port},{username}")
         print(f"Joining {ip}:{port} as {username}")
 
