@@ -16,13 +16,13 @@ pygame.display.set_caption("pygame sount test")
 clock = pygame.time.Clock()
 
 # wav, mp3, ogg 가능
-pygame.mixer.music.load('Roly-Poly.mp3')
+pygame.mixer.music.load('out.wav')
 
 # wav, ogg 가능
-sound_thunder = pygame.mixer.Sound('Roly-Poly.mp3')
+sound_thunder = pygame.mixer.Sound('out.wav')
 
 # Music stream 무한 반복
-#pygame.mixer.music.play(-1)
+pygame.mixer.music.play(-1)
 
 playing = True
 while playing:
