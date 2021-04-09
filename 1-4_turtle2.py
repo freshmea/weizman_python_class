@@ -31,10 +31,14 @@ def 사각형():
 # for i in range(10):
 #     사각형()
 #     왼쪽(10)
+def 고사각형(a, b):
+    turtle.goto(a, b)
+    사각형()
+    return
 
 
 
 원(100)
 사각형()
-turtle.onscreenclick(turtle.goto)
+turtle.onscreenclick(고사각형)
 그대로두세요()
