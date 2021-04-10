@@ -7,7 +7,6 @@ class Abc(object):
     def __init__(self):
         self.first = 'first string'
         pass
-
     def printx(self):
         print(self.first)
         pass
