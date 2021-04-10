@@ -1,23 +1,25 @@
-print('Hello world')    #이것은 우리가 만든 첫 코드입니다.
-# number1=3.141592
-# number2=6.455213
+def end_zeros(num: int) -> int:
+    # your code here
+    num=str(num)[::-1]
+    print(num)
+    k=0
+    for i in num:
+        if i =='0':
+            k+=1
+        else:
+            break
+    return k
 
 
+if __name__ == '__main__':
+    print("Example:")
+    print(end_zeros(0))
 
-#두 숫자를 입력 받아서 계산해 주는 코드입니다.
-
-
-number1=int(input('첫번째 숫자:'))
-number2=int(input('두번째 숫자:'))
-
-print('첫번째 숫자는:', number1,'두번째 숫자는:', number2)
-print('두 숫자의 합은 :', number1+number2)
-print('두 숫자의 곱은 :', number1*number2)
-print('두 숫자의 나누기는 :', number1/number2)
-
-#이름을 입력 받아서 정보를 출력하는 코드입니다.
-char=input('이름을 입력하세요:')
-print(char+'은 계룡에 살고 있습니다.')
-print(char+'은 30살 입니다.')
-print(char+'은 선생닙입니다.')
-print(char+'의 취미는 컴퓨터 입니다.')
+    # These "asserts" are used for self-checking and not for an auto-testing
+    assert end_zeros(0) == 1
+    assert end_zeros(1) == 0
+    assert end_zeros(10) == 1
+    assert end_zeros(101) == 0
+    assert end_zeros(245) == 0
+    assert end_zeros(100100) == 2
+    print("Coding complete? Click 'Check' to earn cool rewards!")
