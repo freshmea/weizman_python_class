@@ -10,7 +10,7 @@ def end_zeros(num: int) -> int:
             break
     return k
 
-
+aa
 if __name__ == '__main__':
     print("Example:")
     print(end_zeros(0))
