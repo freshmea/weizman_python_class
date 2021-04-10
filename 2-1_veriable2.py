@@ -25,8 +25,7 @@
 # print(string_split)
 
 an=str()
-while not (an.isnumeric() and (len(an) == 11)):
+while not (an.isnumeric() and len(an) == 11 and an[0:3]=='010'):
     an=input('전화번호를 입력해 주세요. 숫자만 입력해 주세요. 11자리를 입력해야 합니다.')
 an2=an[0:3]+'-'+an[3:7]+'-'+an[7:11]
 print(f'당신이 입력한 전화번호는 {an2}입니다.')
-
