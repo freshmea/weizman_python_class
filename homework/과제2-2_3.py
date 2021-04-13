@@ -78,7 +78,7 @@ print(fruits)           # ['banana', 'orange', 'mango', 'lemon', 'apple']
 fruits.append('lime')   # ['banana', 'orange', 'mango', 'lemon', 'apple', 'lime]
 print(fruits)
 
-# 리스트 특정 위치에 집어 넣기 메소드insert
+# 리스트 특정 위치에 집어 넣기 메소드 insert
 fruits = ['banana', 'orange', 'mango', 'lemon']
 fruits.insert(2, 'apple') # insert apple between orange and mango
 print(fruits)           # ['banana', 'orange', 'apple', 'mango', 'lemon']
@@ -92,7 +92,7 @@ print(fruits)  # ['orange', 'mango', 'lemon']
 fruits.remove('lemon')
 print(fruits)  # ['orange', 'mango']
 
-# 마지막 객체를 제거하고 얻어오는 메소드pop
+# 마지막 객체를 제거하고 얻어오는 메소드 pop
 fruits = ['banana', 'orange', 'mango', 'lemon']
 fruits.pop()
 print(fruits)       # ['banana', 'orange', 'mango']
@@ -115,7 +115,7 @@ fruits = ['banana', 'orange', 'mango', 'lemon']
 fruits.clear()
 print(fruits)       # []
 
-# 리스트를 복사하는 메소드 copying a lits
+# 리스트를 복사하는 메소드 copy
 
 fruits = ['banana', 'orange', 'mango', 'lemon']
 fruits_copy = fruits.copy()
