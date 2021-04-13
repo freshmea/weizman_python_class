@@ -194,7 +194,7 @@ web_tech = ['HTML', 'CSS', 'JavaScript', 'React']
 result = '#, '.join(web_tech)
 print(result)  # 'HTML# CSS# JavaScript# React'
 
-# strip(): Removes both leading and trailing characters
+# strip(): 앞쪽이나 뒤쪽의 빈칸을 제거해 준다.
 
 challenge = ' thirty days of python '
 print(challenge.strip())  # thirty days of python
