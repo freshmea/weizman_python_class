@@ -154,7 +154,7 @@ print(challenge.isdigit())  # False
 challenge = '30'
 print(challenge.isdigit())  # True
 
-# isdecimal():Checks decimal characters
+# isdecimal():십진수인지 확인
 
 num = '10'
 print(num.isdecimal())  # True
@@ -199,7 +199,7 @@ print(result)  # 'HTML# CSS# JavaScript# React'
 challenge = ' thirty days of python '
 print(challenge.strip())  # thirty days of python
 
-# replace(): Replaces substring inside
+# replace(): 문자를 대체해줌
 
 challenge = 'thirty days of python'
 print(challenge.replace('python', 'coding'))  # 'thirty days of coding'

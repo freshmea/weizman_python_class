@@ -13,6 +13,7 @@ if __name__=='__main__':
     print("예시:")
     print(end_zeros(0))
 
+    # 함수가 완성 되었는지 체크하는 코드
     assert end_zeros(0) ==1
     assert end_zeros(1) ==0
     assert end_zeros(10) ==1
@@ -20,4 +21,4 @@ if __name__=='__main__':
     assert end_zeros(245) ==0
     assert end_zeros(100100) ==2
     assert end_zeros(100021300) ==2
-    print ("성공!!! 수고했습니다.")
+    print ("성공!!! 수고했습니다.완성!")
