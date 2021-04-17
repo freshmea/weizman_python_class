@@ -23,7 +23,7 @@ print('국가 갯수:', len(countries))
 
 # 리스트 변경
 
-fruits = ['banana', 'orange', 'mango', 'lemon']
+
 first_fruit = fruits[0] # we are accessing the first item using its index
 print(first_fruit)      # banana
 second_fruit = fruits[1]
@@ -36,14 +36,14 @@ last_index = len(fruits) - 1
 last_fruit = fruits[last_index]
 
 # 인덱스로 리스트 접근하기
-fruits = ['banana', 'orange', 'mango', 'lemon']
+
 last_fruit = fruits[-1]
 second_last = fruits[-2]
 print(last_fruit)       # lemon
 print(second_last)      # mango
 
 # 리스트 슬라이싱
-fruits = ['banana', 'orange', 'mango', 'lemon']
+
 all_fruits = fruits[0:4] # 모든 리스트 받아 오기
 
 # 같은 결과
@@ -51,14 +51,14 @@ all_fruits = fruits[0:]
 orange_and_mango = fruits[1:3] # it does not include the end index
 orange_mango_lemon = fruits[1:]
 
-fruits = ['banana', 'orange', 'mango', 'lemon']
+
 all_fruits = fruits[-4:] # it returns all the fruits
 # this is also give the same result as the above
 orange_and_mango = fruits[-3:-1] # it does not include the end index
 orange_mango_lemon = fruits[-3:]
 
 
-fruits = ['banana', 'orange', 'mango', 'lemon']
+
 fruits[0] = 'Avocado'
 print(fruits)       #  ['avocado', 'orange', 'mango', 'lemon']
 fruits[1] = 'apple'
@@ -68,35 +68,35 @@ fruits[last_index] = 'lime'
 print(fruits)        #  ['avocado', 'apple', 'mango', 'lime']
 
 # checking items
-fruits = ['banana', 'orange', 'mango', 'lemon']
+
 does_exist = 'banana' in fruits
 print(does_exist)  # True
 does_exist = 'lime' in fruits
 print(does_exist)  # False
 
 # 리스트 추가 메소드 append
-fruits = ['banana', 'orange', 'mango', 'lemon']
+
 fruits.append('apple')
 print(fruits)           # ['banana', 'orange', 'mango', 'lemon', 'apple']
 fruits.append('lime')   # ['banana', 'orange', 'mango', 'lemon', 'apple', 'lime]
 print(fruits)
 
 # 리스트 특정 위치에 집어 넣기 메소드 insert
-fruits = ['banana', 'orange', 'mango', 'lemon']
+
 fruits.insert(2, 'apple') # insert apple between orange and mango
 print(fruits)           # ['banana', 'orange', 'apple', 'mango', 'lemon']
 fruits.insert(3, 'lime')   # ['banana', 'orange', 'apple', 'mango', 'lime','lemon',]
 print(fruits)
 
 # 항목을 지정해서 제거하는 메소드 remove
-fruits = ['banana', 'orange', 'mango', 'lemon']
+
 fruits.remove('banana')
 print(fruits)  # ['orange', 'mango', 'lemon']
 fruits.remove('lemon')
 print(fruits)  # ['orange', 'mango']
 
 # 마지막 객체를 제거하고 얻어오는 메소드 pop
-fruits = ['banana', 'orange', 'mango', 'lemon']
+
 fruits.pop()
 print(fruits)       # ['banana', 'orange', 'mango']
 
@@ -104,7 +104,7 @@ fruits.pop()
 print(fruits)       # ['orange', 'mango']
 
 # del
-fruits = ['banana', 'orange', 'mango', 'lemon']
+
 del fruits[0]
 print(fruits)       # ['orange', 'mango', 'lemon']
 
