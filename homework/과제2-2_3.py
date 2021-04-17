@@ -21,25 +21,6 @@ print('인터넷 기술 갯수:', len(web_techs))
 print('국가:', countries)
 print('국가 갯수:', len(countries))
 
-an=input('과일, 야채, 동물, 인터넷기술, 국가 중 하나를 입력하세요: ')
-ab=''
-for i in fruits:
-    if an == i:
-        ab='과일'
-for i in vegetables:
-    if an == i:
-        ab='야채'
-for i in animal_products:
-    if an == i:
-        ab='동물제품'
-for i in web_techs:
-    if an == i:
-        ab='웹기술'
-for i in countries:
-    if an == i:
-        ab='나라'
-
-print(an,'는', ab, '입니다.')
 # 리스트 변경
 
 fruits = ['banana', 'orange', 'mango', 'lemon']
