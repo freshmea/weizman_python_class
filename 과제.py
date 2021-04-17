@@ -7,7 +7,14 @@
 
 def end_zeros(num: int) -> int:
     # 여기에 코드를 작성하세요.
-    return
+    re = 0
+    for i in str(num)[::-1]:
+        if i == '0' :
+            re = re + 1
+        else:
+            break
+    return re
+
 
 if __name__=='__main__':
     print("예시:")
