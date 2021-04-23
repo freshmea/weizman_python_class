@@ -1,25 +1,14 @@
-def end_zeros(num: int) -> int:
-    # your code here
-    num=str(num)[::-1]
-    print(num)
-    k=0
-    for i in num:
-        if i =='0':
-            k+=1
-        else:
-            break
-    return k
+setType1 = {1, 2, 3, 4}
+setType2 = {3, 4, 5, 6, 7, 8}
 
-aa
-if __name__ == '__main__':
-    print("Example:")
-    print(end_zeros(0))
+unionset = setType1.union(setType2) #합집합
+interset = setType1.intersection(setType2) #교집합
+difference1 = setType1.difference(setType2) #차집합
+difference2 = setType2.difference(setType1)
+print(unionset ,'\n' ,interset ,'\n' ,
+      difference1 ,'\n' ,difference2)
 
-    # These "asserts" are used for self-checking and not for an auto-testing
-    assert end_zeros(0) == 1
-    assert end_zeros(1) == 0
-    assert end_zeros(10) == 1
-    assert end_zeros(101) == 0
-    assert end_zeros(245) == 0
-    assert end_zeros(100100) == 2
-    print("Coding complete? Click 'Check' to earn cool rewards!")
+print(setType1 - setType2) #차집합
+print(setType1 & setType2) #교집합
+print(setType1 | setType2) #합집합
+
