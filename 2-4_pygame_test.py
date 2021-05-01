@@ -6,7 +6,8 @@ screen = pygame.display.set_mode((600, 400))
 clock = pygame.time.Clock()
 a_image = pygame.image.load('images/ben-a.svg')
 font = pygame.font.SysFont('malgungothic', 36)
-
+sound = pygame.mixer.Sound('wave/attention.wav')
+sound.play()
 y = 0
 x = 0
 while True:
@@ -23,6 +24,9 @@ while True:
         x -= 1
     if pressed_keys[pygame.K_d]:
         x += 1
+
+    변수이름_r = pygame.transform.rotate(변수이름, 20)
+    변수이름 = 변수이름_r
     screen.fill((255,255,255))
     screen.blit(a_image, (x ,y))
     a=font.render('안녕하세요!!!!', True, (255, 0, 0))
