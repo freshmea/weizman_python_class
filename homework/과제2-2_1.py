@@ -10,12 +10,12 @@ from typing import Iterable
 
 
 def remove_all_before(items: list, border: int) -> Iterable:
-    # your code here
+    # 여기에 코드를 쓰세요
     return items
 
 
 if __name__ == '__main__':
-    print("Example:")
+    print("예시:")
     print(list(remove_all_before([1, 2, 3, 4, 5], 3)))
 
     #함수가 완성 되었는지 체크하는 코드

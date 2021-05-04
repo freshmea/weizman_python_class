@@ -11,12 +11,12 @@ from typing import Iterable
 
 
 def replace_first(items: list) -> Iterable:
-    # your code here
+    # 여기에 코드를 쓰세요
 
 
 
 if __name__ == '__main__':
-    print("Example:")
+    print("예시:")
     print(list(replace_first([1, 2, 3, 4])))
 
     #함수가 완성 되었는지 체크하는 코드

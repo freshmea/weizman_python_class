@@ -11,7 +11,6 @@ from typing import Iterable
 
 
 def replace_first(items: list) -> Iterable:
-    # your code here
     if items != []:
         items.append(items[0])
         del(items[0])

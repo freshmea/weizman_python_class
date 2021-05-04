@@ -10,7 +10,6 @@ from typing import Iterable
 
 
 def remove_all_before(items: list, border: int) -> Iterable:
-    # your code here
     a = 0
     for i, k in enumerate(items):
         if k == border:
