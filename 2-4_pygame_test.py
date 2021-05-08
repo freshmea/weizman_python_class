@@ -25,8 +25,6 @@ while True:
     if pressed_keys[pygame.K_d]:
         x += 1
 
-    변수이름_r = pygame.transform.rotate(변수이름, 20)
-    변수이름 = 변수이름_r
     screen.fill((255,255,255))
     screen.blit(a_image, (x ,y))
     a=font.render('안녕하세요!!!!', True, (255, 0, 0))
