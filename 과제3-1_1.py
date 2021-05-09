@@ -45,7 +45,8 @@ def attack(atk, hp):
         return hp
     else:
         print(f'플레이어의 체력은 {hp}이다. ')
-    print(f'몬스터가 공격 했다. 몬스터가 {atk}만큼 피를 줌')
+    print(f'몬스터가 공격 했다. 플레이어가 {atk}만큼 피해를 받았다.')
+    print(f'플레이어가 {player_defence} 만큼 피해를 방어했다.')
     hp -= 100 - player_defence
     if hp < 0:
         print('플레이어가 사망했다.')
