@@ -30,8 +30,8 @@ class Player:
         self.hp = 15
         self.deff = 2
         self.atk = 5
-        self.y = 19
-        self.x = 17
+        self.y = 0
+        self.x = 0
         self.kill = 0
 
     def update(self, move):
@@ -49,6 +49,9 @@ class Player:
                 print(f'체력 {self.hp}')
             else:
                 print('더이상 체력이 오르지 않는다.')
+        elif move == 6:
+            for i in map1:
+                print(i)
 
     def attack(self, mob):
         while mob.hp > 0:
@@ -119,6 +122,7 @@ def next_turn():
     if map1[player.y + 1][player.x]:
         print('아래로 갈 수 있다.[4]')
     print('휴식하여 체력을 회복한다.[5]')
+    print('지도를 본다.[6]')
 
 
 player = Player()
@@ -160,6 +164,7 @@ while playing:
     for monster in monsters:
         if player.x == monster.x and player.y == monster.y:
             print('몬스터를 만났다.')
+            print(f'몬스터 정보 체력{monster.hp}, 공격력{monster.atk}, 방어력{monster.deff}')
             go = input('싸울것인가?[1] 도망갈 것인가?[2]')
             go = int(go)
             if go == 1:
@@ -169,11 +174,16 @@ while playing:
                     exit()
             if go == 2:
                 player.hp -= 3
+                if player.x == 18 and player.y == 19:
+                    player.x -= 1
+                    print('문지기를 통과하지 못했다. 뒤로 돌아간다.')
                 if player.hp < 0:
                     print('넌 죽었다.')
                     exit()
 
     print('-------------------------------------------')
+    print(f'플레이어의 위치{player.x}, {player.y}')
+    print(f'플레이어의 체력{player.hp}, 공격력{player.atk}, 방어력{player.deff}, 죽인 몬스터 수{player.kill}')
     next_turn()
     go = ''
     while not go.isdigit():
@@ -193,5 +203,3 @@ while playing:
     if player.hp < 10:
         player.hp += 1
         print(f'한턴이 지나서 체력이 1 증가 한다.체력이 {player.hp}가 되었다.')
-
-    print('플레이어', player.x, player.y)
