@@ -21,16 +21,16 @@
 # # print('a ** b = ', a ** b)
 # #
 # # # 관계 연산자
-# # a = 10
-# # b = 3
-# # print(a > b)
-# # print(a >= b)
-# # print(a < b)
-# # print(a > b)
-# # print(a >= b)
-# # print(a == b)
-# # print(a != b)
-# #
+a = 10
+b = 3
+print('이것은 관계연산자입니다.', a > b)
+print('이것은 관계연산자입니다.', a >= b)
+print('이것은 관계연산자입니다.', a < b)
+print('이것은 관계연산자입니다.', a > b)
+print('이것은 관계연산자입니다.', a >= b)
+print('이것은 관계연산자입니다.', a == b)
+print('이것은 관계연산자입니다.', a != b)
+
 
 
 a= input('수를 입력하세요.')
