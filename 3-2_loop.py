@@ -86,5 +86,5 @@ while playing:
     if a == 'y':
         playing = False
     else:
-        playgin = True
+        playging = True
 print('프로그램을 종료합니다.')
