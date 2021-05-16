@@ -4,9 +4,9 @@ import sys
 pygame.init()
 screen = pygame.display.set_mode((600, 400))
 clock = pygame.time.Clock()
-a_image = pygame.image.load('images/ben-a.svg')
+a_image = pygame.image.load('../images/ben-a.svg')
 font = pygame.font.SysFont('malgungothic', 36)
-sound = pygame.mixer.Sound('wave/attention.wav')
+sound = pygame.mixer.Sound('../wave/attention.wav')
 sound.play()
 y = 0
 x = 0

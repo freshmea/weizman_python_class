@@ -1,11 +1,14 @@
-# a=0
-# for i in range(1000):
-#       a += 1
-#       print(a)
-#
-ab='123456'
+setType1 = {1, 2, 3, 4}
+setType2 = {3, 4, 5, 6, 7, 8}
 
-if ab.isdigit():
-      print('숫자')
-else:
-      print('문자열')
+unionset = setType1.union(setType2) #합집합
+interset = setType1.intersection(setType2) #교집합
+difference1 = setType1.difference(setType2) #차집합
+difference2 = setType2.difference(setType1)
+print(unionset ,'\n' ,interset ,'\n' ,
+      difference1 ,'\n' ,difference2)
+
+print(setType1 - setType2) #차집합
+print(setType1 & setType2) #교집합
+print(setType1 | setType2) #합집합
+
