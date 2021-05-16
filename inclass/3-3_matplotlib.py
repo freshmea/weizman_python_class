@@ -1,14 +1,20 @@
 # import matplotlib.pyplot as plt
+# import matplotlib.font_manager as fm
+# path= '../fonts/malgun.ttf'
+# font_name = fm.FontProperties(fname=path, size=18).get_name()
+# plt.rc('font', family=font_name)
 #
-# months=['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-# temp_f1=[15, 16, 18, 21, 24, 27, 28, 26, 23, 19, 16, 11]
-# temp_ny=[2,2,4,11,16,22,25,26,24, 14, 12, 3]
+# months = [str(x+1)+'월' for x in range(12)]
+# temp_f1 = [15, 16, 18, 21, 24, 27, 28, 26, 23, 19, 16, 11]
+# temp_ny = [2, 2, 4, 11, 16, 22, 25, 26, 24, 14, 12, 3]
+#
 #
 # plt.plot(months, temp_f1, marker="o", color='red', linestyle=':', label='FL')
 # plt.plot(months, temp_ny, marker='*', color='blue', linestyle=':', label='NY')
-# plt.xlabel('Month')
-# plt.ylabel('Celcius Temperature')
-# plt.title('Monthly Temperature in temp_f1')
+# plt.xlabel('월')
+# plt.ylabel('섭씨 온도')
+# plt.title('서울의 월별 날씨')
+# plt.grid(True)
 # plt.show()
 
 # import matplotlib.pyplot as plt
@@ -78,3 +84,48 @@
 # plt.pie(gold, labels=countries, autopct="%.1f%%")
 # plt.title('Stock Sectores')
 # plt.show()
+
+
+import matplotlib.pyplot as plt
+import matplotlib.font_manager as fm
+import numpy as np
+import pygame
+
+# path= '../fonts/malgun.ttf'
+# font_name = fm.FontProperties(fname=path, size=18).get_name()
+# plt.rc('font', family=font_name)
+
+x = np.linspace(0, 4 * np.pi, 2000)
+y = np.sin(x)
+y2 = np.cos(x)
+y3 = np.tan(x)
+
+plt.plot(x, y, color='red', label='sine')
+plt.plot(x, y2, color='blue', label='cosine')
+plt.plot(x, y3, label='tangent')
+plt.ylim(-2, 2)
+plt.xlabel('x')
+plt.ylabel('y')
+# plt.title('삼각함수')
+
+plt.legend(loc='upper left')
+plt.grid(True)
+plt.draw()
+fig = plt.gcf()
+fig.savefig('11.png', dpi=fig.dpi)
+
+pygame.init()
+win = pygame.display.set_mode((600, 600))
+pygame.display.set_caption("image test")
+clock = pygame.time.Clock()
+
+img = pygame.image.load('11.png')
+while True:
+    clock.tick(60)
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+    win.fill((255,255,255))
+    win.blit(img, (0, 0))
+    pygame.display.update()
+
