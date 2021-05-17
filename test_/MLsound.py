@@ -1,7 +1,7 @@
 import librosa, librosa.display
 import matplotlib.pyplot as plt
 import numpy as np
-file= "out.wav"
+file= "../out.wav"
 
 signal, sr = librosa.load(file, sr=1000)
 librosa.display.waveplot(signal, sr=sr)
