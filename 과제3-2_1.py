@@ -43,6 +43,8 @@ def primes1(number):
         if result:
             prime.append(i)
     print(prime)
+
+
 def primes2(number):
     a=[False, False]+[True]*(number-1)
     prime=[]
