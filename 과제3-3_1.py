@@ -52,14 +52,14 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-x = np.linspace(-4, 4 , 2000)
+x = np.linspace(-4, 4, 2000)
 
-#반지름
-r=3
-y = (r*r-x*x)**(1/2)
-y2=-(r*r-x*x)**(1/2)
-plt.plot(x,y, color='black')
-plt.plot(x,y2, color='black')
+# 반지름
+r = 3
+y = (r * r - x * x) ** (1 / 2)
+y2 = -(r * r - x * x) ** (1 / 2)
+plt.plot(x, y, color='black')
+plt.plot(x, y2, color='black')
 plt.grid(True)
 plt.ylim(-4, 4)
 plt.xlim(-5, 5)
