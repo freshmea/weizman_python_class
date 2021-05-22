@@ -111,6 +111,7 @@ plt.ylabel('y')
 plt.legend(loc='upper left')
 plt.grid(True)
 plt.draw()
+
 fig = plt.gcf()
 fig.savefig('11.png', dpi=fig.dpi)
 
