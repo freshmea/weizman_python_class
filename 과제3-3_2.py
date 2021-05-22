@@ -2,7 +2,6 @@
 
 def func1(a, b, c, d, e):
     if str(a).isdigit() and str(b).isdigit() and str(c).isdigit() and str(d).isdigit() and str(e).isdigit():
-        print('???')
         return a * b * c * d * e
     return 'error'
 
