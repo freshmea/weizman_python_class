@@ -6,11 +6,6 @@ path=font_list[font_list.index('C:\Windows\Fonts\malgun.ttf')]
 font_name = fm.FontProperties(fname=path, size=18).get_name()
 plt.rc('font', family=font_name)
 
-for font in font_list:
-    fp=fm.FontProperties(fname=font)
-    fn=fp.get_name()
-    print("%s >> %s" %(fp,fn))
-
 f=open('ta.csv')
 data = csv.reader(f)
 next(data)
@@ -19,6 +14,7 @@ resulty = []
 resultx= []
 
 for row in data:
+    print(row)
     if row[-1] != '':
         if row[0].split('-')[1] == '02' and row[0].split('-')[2] == '11':
             resulty.append(float(row[-1]))
