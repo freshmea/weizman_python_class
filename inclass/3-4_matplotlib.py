@@ -31,7 +31,7 @@
 # students=[11, 8, 5, 4, 2]
 # colors=['red', 'green', 'blue', 'yellow', 'cyan']
 #
-# plt.plot(pets, students, color=colors[0])
+# plt.bar(pets, students, color=colors)
 #
 # plt.xlabel('Pets')
 # plt.ylabel('Students')
@@ -103,7 +103,7 @@ import matplotlib.pyplot as plt
 countries = ['USA', 'GBR', "China", 'Russia', 'Germany']
 gold = [34, 53, 24, 54, 24]
 colors= ['red', 'green', 'blue', 'yellow', 'cyan']
-explode=[0, 0.1, 0.2, 0.3, 0]
+explode=[0, 0.1, 0, 0, 0]
 
 plt.pie(gold, explode=explode, labels=countries, colors=colors, autopct="%.1f%%")
 plt.title('medal')
