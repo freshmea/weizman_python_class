@@ -53,8 +53,7 @@ countries = ['미국', '우크라이나', "중극", '러시아', '독일']
 gold = [34, 53, 24, 54, 24]
 silver = [23, 41, 32, 14, 34]
 bronze = [23, 52, 34, 95, 13]
-for a in zip(gold, silver):
-    print(a)
+print(map(gold, silver))
 bottom_silver = [a + 3 for a in gold]
 bottom_bronze = [a + b + 6 for a, b in zip(gold, silver)]
 
