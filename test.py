@@ -1,23 +1,25 @@
+import tkinter as tk
 
-class Rgb:
-    def __init__(self, r, g, b):
-        self.r =r
-        self.g = g
-        self.b = b
+class Application(tk.Frame):
+    def __init__(self, master=None):
+        super().__init__(master)
+        self.master = master
+        self.pack()
+        self.create_widgets()
 
-    def __add__(self, other):
-        self.r += other.r
-        self.g += other.g
-        self.b += other.b
+    def create_widgets(self):
+        self.hi_there = tk.Button(self)
+        self.hi_there["text"] = "Hello World\n(click me)"
+        self.hi_there["command"] = self.say_hi
+        self.hi_there.pack(side="top")
 
-    def pr(self):
-        print(self.r, self.g, self.b)
+        self.quit = tk.Button(self, text="QUIT", fg="red",
+                              command=self.master.destroy)
+        self.quit.pack(side="bottom")
 
+    def say_hi(self):
+        print("hi there, everyone!")
 
-a = Rgb(1, 2, 3)
-b = Rgb(23, 13, 13)
-
-c = a + b
-a.pr()
-b.pr()
-print(type(c))
+root = tk.Tk()
+app = Application(master=root)
+app.mainloop()
