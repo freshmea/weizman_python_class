@@ -12,7 +12,7 @@ path=font_list[font_list.index('C:\Windows\Fonts\malgun.ttf')]
 font_name = fm.FontProperties(fname=path, size=18).get_name()
 plt.rc('font', family=font_name)
 
-f=open('ta.csv')
+f=open('../ta.csv')
 data = csv.reader(f)
 next(data)
 resulty2= []
