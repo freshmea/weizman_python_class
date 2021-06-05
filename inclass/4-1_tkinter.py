@@ -91,7 +91,6 @@
 # root.mainloop()
 
 
-
 # from tkinter import *
 #
 #
@@ -114,41 +113,47 @@
 #
 # root.mainloop()
 #
+
+
 import tkinter as tk
 
 
-
-
 def cal1():
-    d.config(text=int(a1.get())*int(b1.get()))
+    d.config(text=int(a1.get()) * int(b1.get()))
+
+
 def cal2():
-    d.config(text=int(a1.get())/int(b1.get()))
+    d.config(text=int(a1.get()) / int(b1.get()))
+
+
 def cal3():
-    d.config(text=int(a1.get())+int(b1.get()))
+    d.config(text=int(a1.get()) + int(b1.get()))
+
+
 def cal4():
-    d.config(text=int(a1.get())-int(b1.get()))
+    d.config(text=int(a1.get()) - int(b1.get()))
 
 
-root=tk.Tk()
+root = tk.Tk()
 
 root.title("최수길-계산기 V 1.0")
 root.geometry("640x400+100+100")
 root.resizable(False, False)
 
-a=tk.Label(root, text='첫번째 숫자를 입력하세요.')
+a = tk.Label(root, text='첫번째 숫자를 입력하세요.')
 a.config(font=('Roman', 30))
 a.pack()
-a1=tk.Entry(root)
+a1 = tk.Entry(root)
 a1.pack()
-b=tk.Label(root, text='두번째 숫자를 입력하세요.')
+b = tk.Label(root, text='두번째 숫자를 입력하세요.')
 b.config(font=('Roman', 30))
 b.pack()
-b1=tk.Entry(root)
+b1 = tk.Entry(root)
 b1.pack()
-c1=tk.Button(root, text='곱하기', command=cal1)
-c2=tk.Button(root, text='나누기', command=cal2)
-c3=tk.Button(root, text='더하기', command=cal3)
-c4=tk.Button(root, text='빼기', command=cal4)
+c1 = tk.Button(root, text='곱하기', command=cal1)
+c2 = tk.Button(root, text='나누기', command=cal2)
+c3 = tk.Button(root, text='더하기', command=cal3)
+c4 = tk.Button(root, text='빼기', command=cal4)
 c1.config(font=('Roman', 20))
 c2.config(font=('Roman', 20))
 c3.config(font=('Roman', 20))
@@ -157,9 +162,7 @@ c1.pack()
 c2.pack()
 c3.pack()
 c4.pack()
-d=tk.Label(root, text='결과값을 나타냅니다.')
+d = tk.Label(root, text='결과값을 나타냅니다.')
 d.pack()
-
-
 
 root.mainloop()
