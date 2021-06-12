@@ -95,51 +95,53 @@
 #
 # top.mainloop()
 
-import tkinter as tk
-import tkinter.filedialog as tkf
-import os
+# import tkinter as tk
+# import tkinter.filedialog as tkf
+# import os
+#
+# def domenu():
+#     pass
+#
+# def save():
+#     f = tkf.asksaveasfile(mode="w", defaultextension=".txt")
+#     if f is None:
+#         return
+#     ts = str(text.get(1.0, 'end'))
+#     f.write(ts)
+#     f.close()
+#
+# def openf():
+#     file = tkf.askopenfilename(title="파일 선택", filetypes=(("텍스트 파일", "*.txt"), ("모든 파일", "*.*")))
+#     root.title(os.path.basename(file) + " - 메모장")
+#     text.delete(1.0, 'end')
+#     f = open(file, "r")
+#     text.insert(1.0, f.read())
+#     f.close()
+#
+#
+# root = tk.Tk()
+# mb = tk.Menu(root)
+# fmb = tk.Menu(mb, tearoff=0)
+# mb.add_cascade(label='파일', menu=fmb)
+# fmb.add_command(label='새파일', command=domenu)
+# fmb.add_command(label='불러오기', command=openf)
+# fmb.add_command(label='저장', command=save)
+# fmb.add_command(label='다른이름으로 저장', command=domenu)
+#
+# emb = tk.Menu(mb, tearoff=0)
+# mb.add_cascade(label='에디트', menu=emb)
+# emb.add_command(label='복사', command=domenu)
+# emb.add_command(label='붙여넣기', command=domenu)
+# emb.add_command(label='반복', command=domenu)
+# emb.add_command(label='되돌리기', command=domenu)
+#
+# text = tk.Text(root, height=30, width=80)
+# text.pack()
+#
+# root.config(menu=mb)
+# root.mainloop()
 
-def domenu():
-    pass
 
-def save():
-    f = tkf.asksaveasfile(mode="w", defaultextension=".txt")
-    if f is None:
-        return
-    ts = str(text.get(1.0, 'end'))
-    f.write(ts)
-    f.close()
-
-def openf():
-    file = tkf.askopenfilename(title="파일 선택", filetypes=(("텍스트 파일", "*.txt"), ("모든 파일", "*.*")))
-    root.title(os.path.basename(file) + " - 메모장")
-    text.delete(1.0, 'end')
-    f = open(file, "r")
-    text.insert(1.0, f.read())
-    f.close()
-
-
-root = tk.Tk()
-mb = tk.Menu(root)
-fmb = tk.Menu(mb, tearoff=0)
-mb.add_cascade(label='파일', menu=fmb)
-fmb.add_command(label='새파일', command=domenu)
-fmb.add_command(label='불러오기', command=openf)
-fmb.add_command(label='저장', command=save)
-fmb.add_command(label='다른이름으로 저장', command=domenu)
-
-emb = tk.Menu(mb, tearoff=0)
-mb.add_cascade(label='에디트', menu=emb)
-emb.add_command(label='복사', command=domenu)
-emb.add_command(label='붙여넣기', command=domenu)
-emb.add_command(label='반복', command=domenu)
-emb.add_command(label='되돌리기', command=domenu)
-
-text = tk.Text(root, height=30, width=80)
-text.pack()
-
-root.config(menu=mb)
-root.mainloop()
 #
 # from tkinter import *
 #
@@ -172,46 +174,35 @@ root.mainloop()
 # root.mainloop()
 
 
-# import tkinter as tk
-#
-# root = tk.Tk()
-# root.geometry("320x240")  # root 윈도우는 pack()이 필요없다.
-# root.title("Frame Test")
-#
-# frame = tk.Frame(root, bd=5, bg='light blue', relief='groove')  # 메인프레임
-# frame.pack()
-#
-# l_frame = tk.Frame(root, bd=40, bg='white')  # 왼쪽프레임
-# l_frame.pack(side=tk.LEFT)
-#
-# l_frame1 = tk.Frame(l_frame, bd=40, bg='white')  # 왼쪽1프레임
-# l_frame1.pack(side=tk.LEFT)
-#
-# l_frame2 = tk.Frame(l_frame, bd=40, bg='white')  # 왼쪽2프레임
-# l_frame2.pack(side=tk.RIGHT)
-#
-# r_frame = tk.Frame(root)  # 오른쪽프레임
-# r_frame.pack(side=tk.RIGHT)
-#
-# label = tk.Label(frame, text='Hello Tkinter!')  # top 쪽에 올라감
-# label.pack()
-#
-# button1 = tk.Button(l_frame1, text='Button 1')  # 기본형
-# button1.pack(padx=10, pady=10)
-#
-# button11 = tk.Button(l_frame1, text='Button 11')  # 기본형
-# button11.pack(padx=10, pady=10)
-#
-# button12 = tk.Button(l_frame1, text='Button 12')  # 기본형
-# button12.pack(padx=10, pady=10)
-#
-# button2 = tk.Button(r_frame, text='Button 2', bd=5, bg='light blue', )
-# button2.pack(padx=10, pady=10)
-#
-# button3 = tk.Button(l_frame2, text='Button 3', bd=5, bg='light green')
-# button3.pack(padx=10, pady=10)
-#
-# button4 = tk.Button(r_frame, text='Button 4', relief='sunken')
-# button4.pack(padx=10, pady=10)
-#
-# root.mainloop()
+import tkinter as tk
+
+def temp():
+    pass
+
+root = tk.Tk()
+root.geometry("320x240")
+root.title("메뉴")
+
+mb = tk.Menu(root)
+fm = tk.Menu(mb, tearoff=0)
+mb.add_cascade(label='파일', menu=fm)
+fm.add_command(label='새파일', command=temp)
+fm.add_command(label='열기', command=temp)
+fm.add_command(label='블러오기', command=temp)
+fm.add_command(label='다른이름으로 저장', command=temp)
+
+em = tk.Menu(mb, tearoff=0)
+mb.add_cascade(label='편집', menu=em)
+em.add_command(label='잘라내기', command=temp)
+em.add_command(label='붙여넣기', command=temp)
+em.add_command(label='복사하기', command=temp)
+em.add_command(label='반복하기', command=temp)
+
+hm = tk.Menu(mb, tearoff=0)
+mb.add_cascade(label='사용법', menu=hm)
+
+text=tk.Text()
+text.pack()
+
+root.config(menu=mb)
+root.mainloop()
