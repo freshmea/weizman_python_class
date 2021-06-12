@@ -2,6 +2,7 @@
 # root = tk.Tk()
 #
 # label1 = tk.Label(root, text="안녕하세요!!!")
+# label1.config(font=('malgun', 30))
 # label1.pack()
 #
 # root.mainloop()
