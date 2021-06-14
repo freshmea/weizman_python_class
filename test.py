@@ -6,15 +6,14 @@ class Application(tk.Frame):
         self.master = master
         self.pack()
         self.create_widgets()
+        self.package()
 
     def create_widgets(self):
-        self.hi_there = tk.Button(self)
-        self.hi_there["text"] = "Hello World\n(click me)"
-        self.hi_there["command"] = self.say_hi
-        self.hi_there.pack(side="top")
+        self.hi_there = tk.Button(self, text="Hello World\n(click me)", command=self.say_hi)
+        self.quit = tk.Button(self, text="QUIT", fg="red", command=self.master.destroy)
 
-        self.quit = tk.Button(self, text="QUIT", fg="red",
-                              command=self.master.destroy)
+    def package(self):
+        self.hi_there.pack(side="top")
         self.quit.pack(side="bottom")
 
     def say_hi(self):
