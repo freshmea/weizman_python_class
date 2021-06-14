@@ -67,11 +67,24 @@
 import tkinter
 import tkinter.font
 
-root=tkinter.Tk()
+# root=tkinter.Tk()
+#
+# font=tkinter.font.Font(family="맑은 고딕", size=20, slant="italic")
+# print(tkinter.font.families())
+# label=tkinter.Label(root, text="파이썬 3.6", font=font)
+# label.pack()
+#
+# root.mainloop()
 
-font=tkinter.font.Font(family="맑은 고딕", size=20, slant="italic")
-print(tkinter.font.families())
-label=tkinter.Label(root, text="파이썬 3.6", font=font)
-label.pack()
+import tkinter as tk
+from tkinter import messagebox
 
-root.mainloop()
+price={'coffee': 3500, 'latte': 4000, "smoothie": 4500, 'tea': 3000}
+order = []
+sum = 0
+
+def center(toplevel):
+    toplevel.update_idletasks()
+    w = toplevel.winfo_screenwidth()
+    h = toplevel.winfo_screenheight()
+    size=tuple(int(_) for _ in toplevel.geometry().split('+')[0].split('x'))
