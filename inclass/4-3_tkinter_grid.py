@@ -31,24 +31,56 @@
 #
 # root.mainloop()
 
-# import tkinter as tk
-#
-# root = tk.Tk()
-# root.geometry('600x600')
-# root.resizable(False, False)
-# image = tk.PhotoImage(file="../icon/dot_red.gif")
-# bt=[]
-# k=0
-# for i in range(10):
-#     for j in range(10):
-#         bt.append(tk.Button(text='버튼'+str(k)))
-#         a=tk.Label(image=image)
-#         bt[k].place(x=55*i, y=55*j)
-#         a.place(x=55*i, y=55*j+30)
-#         k += 1
-#
-# root.mainloop()
 
+import tkinter as tk
+import tkinter.font as f
+import random
+import time
+
+root = tk.Tk()
+root.geometry('600x600')
+root.resizable(False, False)
+
+timetemp = time.time()
+f2 = f.Font(family="맑은 고딕", size=20, slant="italic")
+randk = 0
+score = 0
+
+
+def btcl():
+    global score
+    global randk
+    global timetemp
+    bt[randk].config(bg='white')
+    bt[randk].config(command=cls)
+    randk = random.randint(0, 100)
+    bt[randk].config(bg='blue', command=btcl)
+    if time.time() - timetemp < 1:
+        score += 1
+        label1.config(text='성공!!  점수: '+str(score), font=f2)
+    else:
+        label1.config(text='실패!!  점수: '+str(score), font=f2)
+    timetemp = time.time()
+
+
+def cls():
+    pass
+
+
+
+bt = []
+k = 0
+for i in range(10):
+    for j in range(10):
+        bt.append(tk.Button(text='버튼' + str(k)))
+        bt[k].place(x=55 * i, y=55 * j)
+        k += 1
+
+label1 = tk.Label(text='메세지')
+label1.place(x=100, y=550)
+btcl()
+
+root.mainloop()
 
 # import tkinter as tk
 #
@@ -64,27 +96,14 @@
 #
 # root.mainloop()
 
-import tkinter
-import tkinter.font
-
-# root=tkinter.Tk()
+# import tkinter as tk
+# import tkinter.font as f
 #
-# font=tkinter.font.Font(family="맑은 고딕", size=20, slant="italic")
-# print(tkinter.font.families())
-# label=tkinter.Label(root, text="파이썬 3.6", font=font)
+# root=tk.Tk()
+#
+# font=f.Font(family="맑은 고딕", size=20, slant="italic")
+# print(f.families())
+# label=tk.Label(root, text="파이썬 3.6", font=font)
 # label.pack()
 #
 # root.mainloop()
-
-import tkinter as tk
-from tkinter import messagebox
-
-price={'coffee': 3500, 'latte': 4000, "smoothie": 4500, 'tea': 3000}
-order = []
-sum = 0
-
-def center(toplevel):
-    toplevel.update_idletasks()
-    w = toplevel.winfo_screenwidth()
-    h = toplevel.winfo_screenheight()
-    size=tuple(int(_) for _ in toplevel.geometry().split('+')[0].split('x'))
