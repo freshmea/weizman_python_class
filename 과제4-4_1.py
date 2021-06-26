@@ -5,16 +5,17 @@ import random
 pygame.init()
 pygame.display.set_caption('비오는 게임')
 
-Screen_x=640*2
-Screen_y=480*2
+Screen_x = 640 * 2
+Screen_y = 480 * 2
 
-screen=pygame.display.set_mode((Screen_x, Screen_y))
+screen = pygame.display.set_mode((Screen_x, Screen_y))
 
 clock = pygame.time.Clock()
 
 playing = True
 
-class Rain():
+
+class Rain:
     def __init__(self, x, y):
         self.x = x
         self.y = y
@@ -25,14 +26,15 @@ class Rain():
         self.y += self.speed
 
     def off_screen(self):
-        return self.y > Screen_y+20
+        return self.y > Screen_y + 20
 
     def draw(self):
-        pygame.draw.line(screen, (0,0,0), (self.x, self.y), (self.x, self.y+5), self.bold)
+        pygame.draw.line(screen, (0, 0, 0), (self.x, self.y), (self.x, self.y + 5), self.bold)
 
-rains=[]
+
+rains = []
 for i in range(100):
-    rains.append(Rain(random.randint(10, 630), 10))
+    rains.append(Rain(random.randint(10, Screen_x - 10), 10))
 
 while playing:
 
@@ -41,7 +43,7 @@ while playing:
         pass
         if event.type == pygame.QUIT:
             sys.exit()
-    rains.append(Rain(random.randint(10, 630), 10))
+    rains.append(Rain(random.randint(10, Screen_x - 10), 10))
     clock.tick(60)
     screen.fill((255, 255, 255))
     """빗방울 만들기"""
