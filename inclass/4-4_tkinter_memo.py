@@ -34,6 +34,8 @@
 #
 # root.mainloop()
 
+
+# 파이게임 실습
 import pygame
 import sys
 import random
@@ -90,15 +92,4 @@ while playing:
         print(len(rains))
 
     pygame.display.update()
-
-
-
-
-
-
-
-
-
-
-
 
