@@ -79,6 +79,7 @@ while playing:
         pass
         if event.type == pygame.QUIT:
             sys.exit()
+
     rains.append(Rain(random.randint(10, 630), 10))
     clock.tick(60)
     screen.fill((255, 255, 255))
@@ -89,7 +90,6 @@ while playing:
         if rain.off_screen():
             rains.remove(rain)
             del rain
-        print(len(rains))
 
     pygame.display.update()
 
