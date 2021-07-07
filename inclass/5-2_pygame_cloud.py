@@ -77,6 +77,7 @@ class Game:
             pygame.display.update()
 
     def event(self):
+        # 종료 코드
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.playing = False
