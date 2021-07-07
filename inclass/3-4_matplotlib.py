@@ -41,7 +41,7 @@
 # plt.show()
 
 #plt.savefig('aaa.png')
-
+import matplotlib.colors
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
 font_list=fm.findSystemFonts()
