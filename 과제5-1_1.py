@@ -1,57 +1,8 @@
-# # 파이게임 기본 코드
-# import pygame
-#
-# pygame.init()
-# pygame.display.set_caption('게임 제목')
-# Screen_x = 640 * 2 # 화면 넓이
-# Screen_y = 480 * 2 # 화면 높이
-# screen = pygame.display.set_mode((Screen_x, Screen_y)) # 화면 세팅
-# clock = pygame.time.Clock() # 시계 지정
-#
-# playing = True
-#
-#
-# while playing:
-#     clock.tick(60)
-#     """종료시 프로그램 종료시키는 코드"""
-#     for event in pygame.event.get():
-#         if event.type == pygame.QUIT:
-#             playing = False
-#     pygame.display.update()
-#
-# pygame.quit()
+# 움직이는 공룡 클래스 추카
+# images 안의 back.png 라는 배경 파일도 같이 있어야 실행이 됩니다.
+# images 안의 dino.png 라는 공룡 파일도 같이 있어야 실행이 됩니다.
 
-
-# #파이게임 기본 코드(클래스)
-# import pygame
-#
-# Screen_x = 640 * 2  # 화면 넓이
-# Screen_y = 480 * 2  # 화면 높이
-#
-# class Game:
-#     def __init__(self):
-#         pygame.init()
-#         pygame.display.set_caption('게임 제목')
-#         self.screen = pygame.display.set_mode((Screen_x, Screen_y)) # 화면 세팅
-#         self.clock = pygame.time.Clock() # 시계 지정
-#         self.playing = True
-#     def run(self):
-#         while self.playing:
-#             self.clock.tick(60)
-#             self.event()
-#             pygame.display.update()
-#
-#     def event(self):
-#         for event in pygame.event.get():
-#             if event.type == pygame.QUIT:
-#                 self.playing = False
-#
-# game = Game()
-# game.run()
-# pygame.quit()
-
-
-# 파이게임 비 내리는 코드(클래스)
+# 비 오는 날의 공룡
 import pygame
 import random
 
@@ -81,6 +32,27 @@ class Rain:
         pygame.draw.line(self.game.screen, self.color, (self.x, self.y), (self.x, self.y + self.len), self.bold)
 
 
+class Dino:
+    def __init__(self, game):
+        self.game = game
+        self.image = self.game.image_dino
+        self.x = Screen_x/2
+        self.y = Screen_y-600
+        self.speed = 4
+
+    def load_data(self):
+        pass
+
+    def move(self):
+        self.x += self.speed
+
+    def off_screen(self):
+        return self.x < -600 or self.x > Screen_x-100
+
+    def draw(self):
+        self.game.screen.blit(self.image, (self.x, self.y))
+
+
 class Game:
     def __init__(self):
         pygame.init()
@@ -90,10 +62,12 @@ class Game:
         self.playing = True
         self.rains = []
         self.load_data()
+        self.dino = Dino(self)
 
     def load_data(self):
-        self.image = pygame.image.load('../images/back.png').convert_alpha()
+        self.image = pygame.image.load('images/back.png').convert_alpha()
         self.image = pygame.transform.scale(self.image, (Screen_x, Screen_y))
+        self.image_dino = pygame.image.load('images/dino.png').convert_alpha()
 
     def run(self):
         while self.playing:
@@ -116,12 +90,18 @@ class Game:
             if rain.off_screen():
                 self.rains.remove(rain)
                 del rain
+        self.dino.move()
+        if self.dino.off_screen():
+            self.dino.speed *= -1
+            self.dino.image=pygame.transform.flip(self.dino.image, True, False)
 
     def draw(self):
         self.screen.fill((255, 255, 255))
         self.screen.blit(self.image, (0, 0))
         for rain in self.rains:
             rain.draw()
+        self.dino.draw()
+
 
 
 game = Game()
