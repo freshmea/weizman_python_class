@@ -7,18 +7,18 @@ import pygame
 import random
 
 # 변수
-Screen_x = 640 * 2  # 화면 넓이
-Screen_y = 480 * 2  # 화면 높이
+SCREEN_X = 640 * 2  # 화면 넓이
+SCREEN_Y = 480 * 2  # 화면 높이
 FPS = 60
 
 
 class Rain:
-    def __init__(self, x, y, game):
+    def __init__(self, x, y, root):
         self.x = x
         self.y = y
         self.speed = random.randint(5, 28)
         self.bold = random.randint(1, 4)
-        self.game = game
+        self.root = root
         self.len = random.randint(5, 15)
         self.color = (random.randint(0,255), random.randint(0,255), random.randint(0,255))
 
@@ -26,18 +26,18 @@ class Rain:
         self.y += self.speed
 
     def off_screen(self):
-        return self.y > Screen_y - 200
+        return self.y > SCREEN_Y - 200
 
     def draw(self):
-        pygame.draw.line(self.game.screen, self.color, (self.x, self.y), (self.x, self.y + self.len), self.bold)
+        pygame.draw.line(self.root.screen, self.color, (self.x, self.y), (self.x, self.y + self.len), self.bold)
 
 
 class Dino:
-    def __init__(self, game):
-        self.game = game
-        self.image = self.game.image_dino
-        self.x = Screen_x/2
-        self.y = Screen_y-600
+    def __init__(self, root):
+        self.root = root
+        self.image = self.root.image_dino
+        self.x = SCREEN_X / 2
+        self.y = SCREEN_Y - 600
         self.speed = 4
 
     def load_data(self):
@@ -47,26 +47,26 @@ class Dino:
         self.x += self.speed
 
     def off_screen(self):
-        return self.x < -600 or self.x > Screen_x-100
+        return self.x < -600 or self.x > SCREEN_X - 100
 
     def draw(self):
-        self.game.screen.blit(self.image, (self.x, self.y))
+        self.root.screen.blit(self.image, (self.x, self.y))
 
 
 class Game:
     def __init__(self):
         pygame.init()
         pygame.display.set_caption('게임 제목')
-        self.screen = pygame.display.set_mode((Screen_x, Screen_y))  # 화면 세팅
+        self.screen = pygame.display.set_mode((SCREEN_X, SCREEN_Y))  # 화면 세팅
         self.clock = pygame.time.Clock()  # 시계 지정
         self.playing = True
-        self.rains = []
         self.load_data()
+        self.rains = []
         self.dino = Dino(self)
 
     def load_data(self):
         self.image = pygame.image.load('images/back.png').convert_alpha()
-        self.image = pygame.transform.scale(self.image, (Screen_x, Screen_y))
+        self.image = pygame.transform.scale(self.image, (SCREEN_X, SCREEN_Y))
         self.image_dino = pygame.image.load('images/dino.png').convert_alpha()
 
     def run(self):
@@ -84,7 +84,7 @@ class Game:
 
     def update(self):
         for i in range(3):
-            self.rains.append(Rain(random.randint(0, Screen_x), 0, self))
+            self.rains.append(Rain(random.randint(0, SCREEN_X), 0, self))
         for rain in self.rains:
             rain.move()
             if rain.off_screen():

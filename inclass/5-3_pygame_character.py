@@ -9,7 +9,50 @@ FPS = 60
 CLOUD_NUMBER = 5
 RAIN_NUMBER = 10
 TITLE = '구름에서 비가 내리는 게임'
+CHARACTER_SPEED = 5
 
+
+class Player:
+    def __init__(self, root):
+        self.x = 100
+        self.y = 100
+        self.dx = 0
+        self.dy = 0
+        self.root = root
+        self.image = root.player_image
+        self.hit = 0
+
+    def move(self, key):
+        if key == pygame.K_UP:
+            self.dy = -CHARACTER_SPEED
+            self.dx = 0
+        if key == pygame.K_DOWN:
+            self.dy = CHARACTER_SPEED
+            self.dx = 0
+        if key == pygame.K_LEFT:
+            self.dx = -CHARACTER_SPEED
+            self.dy = 0
+        if key == pygame.K_RIGHT:
+            self.dx = CHARACTER_SPEED
+            self.dy = 0
+
+        if 0 < self.x < SCREEN_X:
+            self.x += self.dx
+        else:
+            self.dx *= -1
+            self.x += self.dx
+
+        if 0 < self.y < SCREEN_Y:
+            self.y += self.dy
+        else:
+            self.dy *= -1
+            self.y += self.dy
+
+    def draw(self):
+        game.screen.blit(self.image, (self.x, self.y))
+
+    def hit_by(self, rain):
+        return pygame.Rect(self.x, self.y, 108, 138).collidepoint((rain.x, rain.y))
 
 
 class Rain:
@@ -62,6 +105,7 @@ class Game:
         self.load_data()
         self.rains = []
         self.clouds = []
+        self.player = Player(self)
 
     def load_data(self):
         # 배경그림 불러오기
@@ -69,6 +113,7 @@ class Game:
         self.image_background = pygame.transform.scale(self.image_background, (SCREEN_X, SCREEN_Y))
         # 구름그림 불러오기
         self.cloud_image = pygame.image.load('../images/cloud.svg').convert_alpha()
+        self.player_image = pygame.image.load('../images/ben-a.svg').convert_alpha()
 
     def run(self):
         while self.playing:
@@ -83,6 +128,10 @@ class Game:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.playing = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_q:
+                    self.playing = False
+                self.player.move(event.key)
 
     def update(self):
         # 구름 생성
@@ -98,9 +147,18 @@ class Game:
             if rain.off_screen():
                 self.rains.remove(rain)
                 del rain
+        # 플레이어 움직임
+        self.player.move(None)
+        # 플레이어가 비 맞음 체크
+        for rain in self.rains:
+            if self.player.hit_by(rain):
+                self.player.hit += 1
+                self.rains.remove(rain)
+                del rain
+        print(self.player.hit)
 
     def draw(self):
-        #self.screen.fill((255, 255, 255))
+        # self.screen.fill((255, 255, 255))
         # 배경화면 그리기
         self.screen.blit(self.image_background, (0, 0))
         # 구름 그리기
@@ -109,6 +167,8 @@ class Game:
         # 비 그리기
         for rain in self.rains:
             rain.draw()
+        # 플레이어 그리기
+        self.player.draw()
 
 
 game = Game()
