@@ -85,7 +85,6 @@ class Game:
         # 구름 생성
         while len(self.clouds) < CLOUD_NUMBER:
             self.clouds.append(Cloud(random.randint(1, 20) * SCREEN_X / 20, self))
-
         # 구름에서 비 생성하고 구름 움직이기
         for cloud in self.clouds:
             cloud.rain()
