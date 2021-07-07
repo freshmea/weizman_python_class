@@ -7,7 +7,9 @@ SCREEN_X = 640 * 2  # 화면 넓이
 SCREEN_Y = 480 * 2  # 화면 높이
 FPS = 60
 CLOUD_NUMBER = 5
-RAIN_NUMBER = 1
+RAIN_NUMBER = 10
+
+
 
 
 class Rain:
@@ -22,6 +24,7 @@ class Rain:
 
     def move(self):
         self.y += self.speed
+        print(RAIN_NUMBER)
 
     def off_screen(self):
         return self.y > SCREEN_Y + 20
