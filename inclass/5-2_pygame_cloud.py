@@ -63,8 +63,8 @@ class Game:
 
     def load_data(self):
         # 배경그림 불러오기
-        self.image = pygame.image.load('../images/back.png').convert_alpha()
-        self.image = pygame.transform.scale(self.image, (SCREEN_X, SCREEN_Y))
+        self.image_background = pygame.image.load('../images/back.png').convert_alpha()
+        self.image_background = pygame.transform.scale(self.image_background, (SCREEN_X, SCREEN_Y))
         # 구름그림 불러오기
         self.cloud_image = pygame.image.load('../images/cloud.svg').convert_alpha()
 
@@ -99,7 +99,7 @@ class Game:
     def draw(self):
         self.screen.fill((255, 255, 255))
         # 배경화면 그리기
-        self.screen.blit(self.image, (0, 0))
+        self.screen.blit(self.image_background, (0, 0))
         # 구름 그리기
         for cloud in self.clouds:
             cloud.draw()
