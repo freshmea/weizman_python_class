@@ -193,7 +193,7 @@ class Game:
         self.image_background = pygame.transform.scale(self.image_background, (SCREEN_X, SCREEN_Y))
         # 구름그림 불러오기
         self.cloud_image = pygame.image.load('../images/cloud.svg').convert_alpha()
-        self.player_image = pygame.image.load('../images/um.png').convert_alpha()
+        self.player_image = pygame.image.load('../images/cloud.svg').convert_alpha()
         self.player_image = pygame.transform.scale(self.player_image, (200, 300))
 
     def run(self):

@@ -56,8 +56,8 @@ import pygame
 import random
 
 # 변수
-Screen_x = 640 * 2  # 화면 넓이
-Screen_y = 480 * 2  # 화면 높이
+SCREEN_X = 640 * 2  # 화면 넓이
+SCREEN_Y = 480 * 2  # 화면 높이
 FPS = 60
 
 
@@ -69,13 +69,13 @@ class Rain:
         self.bold = random.randint(1, 4)
         self.game = game
         self.len = random.randint(5, 15)
-        self.color = (random.randint(0,255), random.randint(0,255), random.randint(0,255))
+        self.color = pygame.Color('red')
 
     def move(self):
         self.y += self.speed
 
     def off_screen(self):
-        return self.y > Screen_y - 200
+        return self.y > SCREEN_Y - 200
 
     def draw(self):
         pygame.draw.line(self.game.screen, self.color, (self.x, self.y), (self.x, self.y + self.len), self.bold)
@@ -85,7 +85,7 @@ class Game:
     def __init__(self):
         pygame.init()
         pygame.display.set_caption('게임 제목')
-        self.screen = pygame.display.set_mode((Screen_x, Screen_y))  # 화면 세팅
+        self.screen = pygame.display.set_mode((SCREEN_X, SCREEN_Y))  # 화면 세팅
         self.clock = pygame.time.Clock()  # 시계 지정
         self.playing = True
         self.rains = []
@@ -93,7 +93,7 @@ class Game:
 
     def load_data(self):
         self.image = pygame.image.load('../images/back.png').convert_alpha()
-        self.image = pygame.transform.scale(self.image, (Screen_x, Screen_y))
+        self.image = pygame.transform.scale(self.image, (SCREEN_X, SCREEN_Y))
 
     def run(self):
         while self.playing:
@@ -110,7 +110,7 @@ class Game:
 
     def update(self):
         for i in range(3):
-            self.rains.append(Rain(random.randint(0, Screen_x), 0, self))
+            self.rains.append(Rain(random.randint(0, SCREEN_X), 0, self))
         for rain in self.rains:
             rain.move()
             if rain.off_screen():
