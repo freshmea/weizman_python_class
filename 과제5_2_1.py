@@ -7,12 +7,13 @@
 
 import pygame
 import random
+import pygame.sprite
 
 # 변수
 SCREEN_X = 640 * 2  # 화면 넓이
 SCREEN_Y = 480 * 2  # 화면 높이
 FPS = 60
-CLOUD_NUMBER = 5
+CLOUD_NUMBER = 10
 
 
 class Cloud:
