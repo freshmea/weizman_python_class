@@ -34,14 +34,12 @@ class Player:
         if self.game.pressed_key[K_RIGHT] and self.x < SCREEN_X - 160:
             self.x += CHARACTER_SPEED
 
+
     def draw(self):
         game.screen.blit(self.image, (self.x, self.y))
-        pygame.draw.polygon(game.screen, pygame.Color('white'), self.mask.outline())
 
     def hit_by(self, rain):
-        #return pygame.Rect(self.x, self.y, 200, 200).collidepoint((rain.x, rain.y))
-        print(self.mask.overlap(rain.mask, (0,0)))
-        return self.mask.overlap(rain.mask, (0,0))
+        return self.mask.overlap_area(rain.mask, (int(rain.x-self.x), int(rain.y-self.y)))
 
 
 class Rain:
@@ -169,6 +167,7 @@ class Game:
         # self.screen.fill((255, 255, 255))
         # 배경화면 그리기
         self.screen.blit(self.image_background, (0, 0))
+        self.draw_text(f'비가 내리고 있습니다. {self.player.hit}', 30, pygame.Color('hotpink'), 100, SCREEN_Y * 1 / 20)
         # 구름 그리기
         for cloud in self.clouds:
             cloud.draw()

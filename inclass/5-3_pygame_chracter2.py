@@ -165,6 +165,7 @@ class Game:
         # self.screen.fill((255, 255, 255))
         # 배경화면 그리기
         self.screen.blit(self.image_background, (0, 0))
+        self.draw_text(f'비가 내리고 있습니다. {self.player.hit}', 30, pygame.Color('hotpink'), 100, SCREEN_Y * 1 / 20)
         # 구름 그리기
         for cloud in self.clouds:
             cloud.draw()
