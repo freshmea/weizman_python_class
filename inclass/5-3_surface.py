@@ -36,9 +36,12 @@ class Player:
 
     def draw(self):
         game.screen.blit(self.image, (self.x, self.y))
+        pygame.draw.polygon(game.screen, pygame.Color('white'), self.mask.outline())
 
     def hit_by(self, rain):
-        return pygame.Rect(self.x, self.y, 200, 200).collidepoint((rain.x, rain.y))
+        #return pygame.Rect(self.x, self.y, 200, 200).collidepoint((rain.x, rain.y))
+        print(self.mask.overlap(rain.mask, (0,0)))
+        return self.mask.overlap(rain.mask, (0,0))
 
 
 class Rain:
@@ -50,6 +53,7 @@ class Rain:
         self.game = root
         self.len = random.randint(5, 15)
         self.color = pygame.Color('gray')
+        self.mask = pygame.mask.from_surface(pygame.Surface((self.bold, self.len)))
 
     def move(self):
         self.y += self.speed
