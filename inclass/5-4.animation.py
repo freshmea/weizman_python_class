@@ -20,10 +20,10 @@ class Player(pygame.sprite.Sprite):
         self.game = root
         self.groups = self.game.all_sprites
         pygame.sprite.Sprite.__init__(self, self.groups)
-        self.image = root.player_images_idle[0]
+        self.image = root.player_images_idle_r[0]
         self.rect = self.image.get_rect()
-        self.rect.x = 100
-        self.rect.y = SCREEN_Y - 200
+        self.rect.centerx = 100
+        self.rect.centery = SCREEN_Y - 200
         self.hit = 0
         self.index = 0
         self.now = 0
@@ -31,22 +31,28 @@ class Player(pygame.sprite.Sprite):
         self.walking_l = False
         self.jumping = False
         self.jumpa = 0
+        self.images = self.game.player_images_walk_r
         self.mask = pygame.mask.from_surface(self.image)
 
     def update(self):
         self.animation()
         self.move()
-        print(self.jumping, self.walking_r, self.walking_l)
 
     def animation(self):
         if self.jumping:
-            self.images = game.player_images_jump
+            if self.images == game.player_images_walk_r or self.images == game.player_images_idle_r or self.images == game.player_images_jump_r:
+                self.images = game.player_images_jump_r
+            else:
+                self.images = game.player_images_jump_l
         elif self.walking_r:
             self.images = game.player_images_walk_r
         elif self.walking_l:
             self.images = game.player_images_walk_l
         else:
-            self.images = game.player_images_idle
+            if self.images == game.player_images_walk_r or self.images == game.player_images_idle_r or self.images == game.player_images_jump_r:
+                self.images = game.player_images_idle_r
+            else:
+                self.images = game.player_images_idle_l
 
         self.image = self.images[self.index]
         if pygame.time.get_ticks() - self.now > 100:
@@ -61,13 +67,13 @@ class Player(pygame.sprite.Sprite):
         #     self.rect.y += -CHARACTER_SPEED
         # if self.game.pressed_key[K_DOWN] and self.rect.y < SCREEN_Y - 200:
         #     self.rect.y += CHARACTER_SPEED
-        if self.game.pressed_key[K_LEFT] and self.rect.x > 0:
-            self.rect.x += -CHARACTER_SPEED
+        if self.game.pressed_key[K_LEFT] and self.rect.centerx > 0:
+            self.rect.centerx += -CHARACTER_SPEED
             self.walking_l = True
         else:
             self.walking_l = False
-        if self.game.pressed_key[K_RIGHT] and self.rect.x < SCREEN_X - 160:
-            self.rect.x += CHARACTER_SPEED
+        if self.game.pressed_key[K_RIGHT] and self.rect.centerx < SCREEN_X - 160:
+            self.rect.centerx += CHARACTER_SPEED
             self.walking_r = True
         else:
             self.walking_r = False
@@ -85,12 +91,12 @@ class Player(pygame.sprite.Sprite):
             self.jumping = False
             self.index = 0
         if self.jumpa < 50:
-            self.rect.y -= 3
+            self.rect.centery -= 3
         else:
-            self.rect.y += 3
+            self.rect.centery += 3
 
     def hit_by(self, rain):
-        return self.mask.overlap_area(rain.mask, (int(rain.rect.x - self.rect.x), int(rain.rect.y - self.rect.y)))
+        return pygame.sprite.collide_mask(self, rain)
 
 
 class Rain(pygame.sprite.Sprite):
@@ -98,11 +104,11 @@ class Rain(pygame.sprite.Sprite):
         self.len = random.randint(5, 15)
         self.bold = random.randint(1, 4)
         self.color = pygame.Color('gray')
-        self.rect = pygame.Surface((self.bold, self.len)).get_rect()
         self.image = pygame.Surface((self.bold, self.len))
+        self.rect = self.image.get_rect()
         self.image.fill(color=self.color)
-        self.rect.x = x
-        self.rect.y = y
+        self.rect.centerx = x
+        self.rect.centery = y
         self.speed = random.randint(5, 28)
         self.game = root
         self.groups = self.game.all_sprites, self.game.rains
@@ -119,11 +125,11 @@ class Rain(pygame.sprite.Sprite):
             self.kill()
 
     def move(self):
-        self.rect.y += self.speed
-        self.rect.x += 4
+        self.rect.centery += self.speed
+        self.rect.centerx += 4
 
     def off_screen(self):
-        return self.rect.y > SCREEN_Y
+        return self.rect.centery > SCREEN_Y
 
 
 class Cloud(pygame.sprite.Sprite):
@@ -158,6 +164,40 @@ class Cloud(pygame.sprite.Sprite):
         return rect.collidepoint(pos)
 
 
+
+class Bird(pygame.sprite.Sprite):
+    def __init__(self, x, y, root):
+        self.game = root
+        self.images = self.game.birds_images
+        self.image = self.images[0]
+        self.rect = self.image.get_rect()
+        self.rect.centerx = x
+        self.rect.centery = y
+        self.groups = self.game.all_sprites, self.game.birds
+        pygame.sprite.Sprite.__init__(self, self.groups)
+        self.speed = random.randint(3, 20)
+        self.index = 0
+        self.now = 0
+
+    def update(self):
+        self.animate()
+        self.move()
+
+    def animate(self):
+        if pygame.time.get_ticks() - self.now > 100:
+            self.now = pygame.time.get_ticks()
+            self.image = self.game.birds_images[self.index]
+            self.index += 1
+        if self.index > len(self.images)-1:
+            self.index = 0
+
+    def move(self):
+        self.rect.centerx += self.speed
+        self.rect.centery -= int(self.speed/random.randint(1,5))
+        if self.rect.x > SCREEN_X:
+            self.kill()
+            del self
+
 class Game:
     def __init__(self):
         pygame.init()
@@ -169,6 +209,7 @@ class Game:
         self.all_sprites = pygame.sprite.Group()
         self.rains = pygame.sprite.Group()
         self.clouds = pygame.sprite.Group()
+        self.birds = pygame.sprite.Group()
         self.player = Player(self)
         self.pressed_key = pygame.key.get_pressed()
 
@@ -176,21 +217,32 @@ class Game:
         # 배경그림 불러오기
         self.image_background = pygame.image.load('../images/back.png').convert_alpha()
         self.image_background = pygame.transform.scale(self.image_background, (SCREEN_X, SCREEN_Y))
-        # 구름그림 불러오기
+        # 구름 이미지 불러오기
         self.image_cloud = pygame.image.load('../images/cloud.svg').convert_alpha()
-        self.player_images_idle = [pygame.image.load(f'../png/Idle ({x}).png').convert_alpha() for x in range(1, 11)]
-        self.player_images_jump = [pygame.image.load(f'../png/Jump ({x}).png').convert_alpha() for x in range(1, 13)]
+        # 플레이어 이미지 불러오기
+        self.player_images_idle_r = [pygame.image.load(f'../png/Idle ({x}).png').convert_alpha() for x in range(1, 11)]
+        self.player_images_idle_l = []
+        self.player_images_jump_r = [pygame.image.load(f'../png/Jump ({x}).png').convert_alpha() for x in range(1, 13)]
+        self.player_images_jump_l = []
         self.player_images_walk_r = [pygame.image.load(f'../png/Walk ({x}).png').convert_alpha() for x in range(1, 11)]
         self.player_images_walk_l = []
-
-        for image in self.player_images_idle:
-            self.player_images_idle[self.player_images_idle.index(image)] = pygame.transform.scale(image, (260, 200))
-        for image in self.player_images_jump:
-            self.player_images_jump[self.player_images_jump.index(image)] = pygame.transform.scale(image, (260, 200))
+        for image in self.player_images_idle_r:
+            self.player_images_idle_r[self.player_images_idle_r.index(image)] = pygame.transform.scale(image,
+                                                                                                       (260, 200))
+        for image in self.player_images_idle_r:
+            self.player_images_idle_l.append(pygame.transform.flip(image, True, False))
+        for image in self.player_images_jump_r:
+            self.player_images_jump_r[self.player_images_jump_r.index(image)] = pygame.transform.scale(image,
+                                                                                                       (260, 200))
+        for image in self.player_images_jump_r:
+            self.player_images_jump_l.append(pygame.transform.flip(image, True, False))
         for image in self.player_images_walk_r:
-            self.player_images_walk_r[self.player_images_walk_r.index(image)] = pygame.transform.scale(image, (260, 200))
+            self.player_images_walk_r[self.player_images_walk_r.index(image)] = pygame.transform.scale(image,
+                                                                                                       (260, 200))
         for image in self.player_images_walk_r:
             self.player_images_walk_l.append(pygame.transform.flip(image, True, False))
+        # 새 이미지 불러오기
+        self.birds_images = [pygame.image.load(f'../png/bird ({x}).png').convert_alpha() for x in range(1, 6)]
 
     def run(self):
         self.opening()
@@ -221,13 +273,15 @@ class Game:
         self.pressed_key = pygame.key.get_pressed()
         while len(self.clouds) < CLOUD_NUMBER:
             self.clouds.add(Cloud(random.randint(1, 20) * SCREEN_X / 20, self))
+        while len(self.birds) < CLOUD_NUMBER:
+            self.birds.add(Bird(0, random.randint(1, 20) * SCREEN_Y / 20, self))
         self.all_sprites.update()
 
     def draw(self):
         # 배경화면 그리기
         self.screen.blit(self.image_background, (0, 0))
-        self.draw_text(f'비가 내리고 있습니다. {self.player.hit}', 30, pygame.Color('hotpink'), 100, SCREEN_Y * 1 / 20)
         self.all_sprites.draw(self.screen)
+        self.draw_text(f'비가 내리고 있습니다. {self.player.hit}', 30, pygame.Color('hotpink'), 100, SCREEN_Y * 1 / 20)
 
     def opening(self):
         self.screen.fill(pygame.Color('black'))
