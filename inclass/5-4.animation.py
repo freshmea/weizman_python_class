@@ -112,14 +112,16 @@ class Rain(pygame.sprite.Sprite):
         self.rect.centery = y
         self.speed = random.randint(5, 28)
         self.game = root
-        self.mask = pygame.mask.from_surface(pygame.Surface((self.bold, self.len)))
+        self.mask = pygame.mask.from_surface(self.image)
 
     def update(self):
         self.move()
-        if self.off_screen():
-            self.kill()
         if self.game.player.hit_by(self):
             self.game.player.hit += 1
+            self.kill()
+            del self
+            return
+        if self.off_screen():
             self.kill()
             del self
 
@@ -128,7 +130,7 @@ class Rain(pygame.sprite.Sprite):
         self.rect.centerx += 4
 
     def off_screen(self):
-        return self.rect.centery > SCREEN_Y
+        return self.rect.centery > SCREEN_Y-100
 
 
 class Cloud(pygame.sprite.Sprite):
@@ -152,7 +154,6 @@ class Cloud(pygame.sprite.Sprite):
 
     def rain(self):
         for _ in range(RAIN_NUMBER):
-            self.game.rains.add(Rain(self.rect.x + random.randint(0, 130), self.rect.y + 70, self.game))
             self.game.all_sprites.add(Rain(self.rect.x + random.randint(0, 130), self.rect.y + 70, self.game))
 
     def click(self):
@@ -193,9 +194,8 @@ class Bird(pygame.sprite.Sprite):
         self.rect.centery -= int(self.speed / random.randint(1, 5))
         if self.rect.centerx > SCREEN_X:
             self.kill()
-            print(self.game.birds.sprites())
-            self.game.birds.add(Bird(0, random.randint(1, 20) * SCREEN_Y / 20, self.game))
-            self.game.all_sprites.add(Bird(0, random.randint(1, 20) * SCREEN_Y / 20, self.game))
+            # self.game.birds.add(Bird(0, random.randint(1, 20) * SCREEN_Y / 20, self.game))
+            # self.game.all_sprites.add(Bird(0, random.randint(1, 20) * SCREEN_Y / 20, self.game))
             del self
 
 
@@ -208,7 +208,6 @@ class Game:
         self.playing = True
         self.load_data()
         self.all_sprites = pygame.sprite.LayeredUpdates()
-        self.rains = pygame.sprite.Group()
         self.clouds = pygame.sprite.Group()
         self.birds = pygame.sprite.Group()
         self.player = Player(self)
@@ -279,12 +278,11 @@ class Game:
         while len(self.clouds) < CLOUD_NUMBER:
             self.clouds.add(Cloud(random.randint(1, 20) * SCREEN_X / 20, self))
             self.all_sprites.add(Cloud(random.randint(1, 20) * SCREEN_X / 20, self))
-        while len(self.birds) < CLOUD_NUMBER:
+        while len(self.birds.sprites()) < CLOUD_NUMBER:
             self.birds.add(Bird(0, random.randint(1, 20) * SCREEN_Y / 20, self))
             self.all_sprites.add(Bird(0, random.randint(1, 20) * SCREEN_Y / 20, self))
         if not self.all_sprites.has(self.player):
             self.all_sprites.add(self.player, layer=self.player.layer)
-        print(len(self.all_sprites), len(self.birds), len(self.clouds), len(self.rains))
         self.all_sprites.update()
 
     def draw(self):
