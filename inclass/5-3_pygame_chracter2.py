@@ -131,7 +131,7 @@ class Game:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 for cloud in self.clouds:
                     if cloud.click():
-                        self.clouds.remove(cloud)
+                        cloud.kill()
                         del cloud
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_q:
