@@ -8,7 +8,7 @@ SCREEN_X = 640 * 2  # 화면 넓이
 SCREEN_Y = 480 * 2  # 화면 높이
 FPS = 60
 CLOUD_NUMBER = 10
-RAIN_NUMBER = 5
+RAIN_NUMBER = 1
 TITLE = '구름에서 비가 내리는 게임'
 CHARACTER_SPEED = 5
 
@@ -106,7 +106,7 @@ class Rain(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self, self.groups)
         self.len = random.randint(5, 15)
         self.bold = random.randint(1, 4)
-        self.color = pygame.Color('gray')
+        self.color = pygame.Color('red')
         self.image = pygame.Surface((self.bold, self.len))
         self.rect = self.image.get_rect()
         self.image.fill(color=self.color)
@@ -219,7 +219,7 @@ class Game:
 
     def load_data(self):
         # 배경그림 불러오기
-        self.image_background = pygame.image.load('../images/back.png').convert_alpha()
+        self.image_background = pygame.image.load('../png/BG/BG.png').convert_alpha()
         self.image_background = pygame.transform.scale(self.image_background, (SCREEN_X, SCREEN_Y))
         # 구름 이미지 불러오기
         self.image_cloud = pygame.image.load('../images/cloud.svg').convert_alpha()
