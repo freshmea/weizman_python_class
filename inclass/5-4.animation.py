@@ -214,6 +214,7 @@ class Game:
         self.rains = pygame.sprite.Group()
         self.player = Player(self)
         self.pressed_key = pygame.key.get_pressed()
+        self.clear = False
 
     def load_data(self):
         # 배경그림 불러오기
@@ -272,6 +273,12 @@ class Game:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_q:
                     self.playing = False
+        # 종료 이벤트
+        if self.player.hit > 5000:
+            self.playing = False
+            self.clear = True
+        if pygame.time.get_ticks() > 30000:
+            self.playing = False
 
     def update(self):
         self.pressed_key = pygame.key.get_pressed()
@@ -289,7 +296,7 @@ class Game:
         # 배경화면 그리기
         self.screen.blit(self.image_background, (0, 0))
         self.all_sprites.draw(self.screen)
-        self.draw_text(f'비가 내리고 있습니다. {self.player.hit}', 30, pygame.Color('hotpink'), 100, SCREEN_Y * 1 / 20)
+        self.draw_text(f'비가 내리고 있습니다. {self.player.hit} 플레이 타임 {pygame.time.get_ticks()/1000}', 30, pygame.Color('hotpink'), 100, SCREEN_Y * 1 / 20)
 
     def opening(self):
         self.screen.fill(pygame.Color('black'))
@@ -309,9 +316,13 @@ class Game:
     def ending(self):
         self.screen.fill(pygame.Color('black'))
         stop = True
-        self.draw_text(f'스페이스 바를 누르면 게임이 종료됩니다.', 30, pygame.Color('hotpink'), 100, SCREEN_Y * 1 / 20)
-        self.draw_text(f'게임을 플레이해 주셔서 감사합니다.', 30, pygame.Color('hotpink'), 100, SCREEN_Y * 2 / 20)
-        self.draw_text(f'^^', 30, pygame.Color('hotpink'), 100, SCREEN_Y * 3 / 20)
+        if self.clear == True:
+            self.draw_text(f'축하합니다. 붉은비를 충분히 모았습니다. 게임 클리어!!', 30, pygame.Color('hotpink'), 100, SCREEN_Y * 1 / 20)
+        else:
+            self.draw_text(f'붉은 비를 많이 못 얻었네요.... ㅠㅠ ', 30, pygame.Color('hotpink'), 100, SCREEN_Y * 1 / 20)
+        self.draw_text(f'스페이스 바를 누르면 게임이 종료됩니다.', 30, pygame.Color('hotpink'), 100, SCREEN_Y * 2 / 20)
+        self.draw_text(f'게임을 플레이해 주셔서 감사합니다.', 30, pygame.Color('hotpink'), 100, SCREEN_Y * 3 / 20)
+        self.draw_text(f'^^', 30, pygame.Color('hotpink'), 100, SCREEN_Y * 4 / 20)
         pygame.display.flip()
         while stop:
             self.clock.tick(60)
