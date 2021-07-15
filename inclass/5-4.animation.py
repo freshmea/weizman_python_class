@@ -18,8 +18,7 @@ class Player(pygame.sprite.Sprite):
         self.dx = 0
         self.dy = 0
         self.game = root
-        self.groups = self.game.all_sprites
-        pygame.sprite.Sprite.__init__(self, self.groups)
+        pygame.sprite.Sprite.__init__(self)
         self.image = root.player_images_idle_r[0]
         self.rect = self.image.get_rect()
         self.rect.centerx = 100
@@ -33,6 +32,7 @@ class Player(pygame.sprite.Sprite):
         self.jumpa = 0
         self.images = self.game.player_images_walk_r
         self.mask = pygame.mask.from_surface(self.image)
+        self.layer = 1
 
     def update(self):
         self.animation()
@@ -101,6 +101,7 @@ class Player(pygame.sprite.Sprite):
 
 class Rain(pygame.sprite.Sprite):
     def __init__(self, x, y, root):
+        pygame.sprite.Sprite.__init__(self)
         self.len = random.randint(5, 15)
         self.bold = random.randint(1, 4)
         self.color = pygame.Color('gray')
@@ -111,8 +112,6 @@ class Rain(pygame.sprite.Sprite):
         self.rect.centery = y
         self.speed = random.randint(5, 28)
         self.game = root
-        self.groups = self.game.all_sprites, self.game.rains
-        pygame.sprite.Sprite.__init__(self, self.groups)
         self.mask = pygame.mask.from_surface(pygame.Surface((self.bold, self.len)))
 
     def update(self):
@@ -121,8 +120,8 @@ class Rain(pygame.sprite.Sprite):
             self.kill()
         if self.game.player.hit_by(self):
             self.game.player.hit += 1
-            self.game.rains.remove(self)
             self.kill()
+            del self
 
     def move(self):
         self.rect.centery += self.speed
@@ -134,13 +133,12 @@ class Rain(pygame.sprite.Sprite):
 
 class Cloud(pygame.sprite.Sprite):
     def __init__(self, x, root):
+        pygame.sprite.Sprite.__init__(self)
         self.image = root.image_cloud
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = random.randint(0, 200)
         self.game = root
-        self.groups = self.game.all_sprites, self.game.clouds
-        pygame.sprite.Sprite.__init__(self, self.groups)
         self.speed = random.randint(3, 10)
 
     def update(self):
@@ -155,6 +153,7 @@ class Cloud(pygame.sprite.Sprite):
     def rain(self):
         for _ in range(RAIN_NUMBER):
             self.game.rains.add(Rain(self.rect.x + random.randint(0, 130), self.rect.y + 70, self.game))
+            self.game.all_sprites.add(Rain(self.rect.x + random.randint(0, 130), self.rect.y + 70, self.game))
 
     def click(self):
         pos = pygame.mouse.get_pos()
@@ -164,17 +163,15 @@ class Cloud(pygame.sprite.Sprite):
         return rect.collidepoint(pos)
 
 
-
 class Bird(pygame.sprite.Sprite):
     def __init__(self, x, y, root):
+        pygame.sprite.Sprite.__init__(self)
         self.game = root
         self.images = self.game.birds_images
         self.image = self.images[0]
         self.rect = self.image.get_rect()
         self.rect.centerx = x
         self.rect.centery = y
-        self.groups = self.game.all_sprites, self.game.birds
-        pygame.sprite.Sprite.__init__(self, self.groups)
         self.speed = random.randint(3, 20)
         self.index = 0
         self.now = 0
@@ -188,15 +185,19 @@ class Bird(pygame.sprite.Sprite):
             self.now = pygame.time.get_ticks()
             self.image = self.game.birds_images[self.index]
             self.index += 1
-        if self.index > len(self.images)-1:
+        if self.index > len(self.images) - 1:
             self.index = 0
 
     def move(self):
         self.rect.centerx += self.speed
-        self.rect.centery -= int(self.speed/random.randint(1,5))
-        if self.rect.x > SCREEN_X:
+        self.rect.centery -= int(self.speed / random.randint(1, 5))
+        if self.rect.centerx > SCREEN_X:
             self.kill()
+            print(self.game.birds.sprites())
+            self.game.birds.add(Bird(0, random.randint(1, 20) * SCREEN_Y / 20, self.game))
+            self.game.all_sprites.add(Bird(0, random.randint(1, 20) * SCREEN_Y / 20, self.game))
             del self
+
 
 class Game:
     def __init__(self):
@@ -206,7 +207,7 @@ class Game:
         self.clock = pygame.time.Clock()  # 시계 지정
         self.playing = True
         self.load_data()
-        self.all_sprites = pygame.sprite.Group()
+        self.all_sprites = pygame.sprite.LayeredUpdates()
         self.rains = pygame.sprite.Group()
         self.clouds = pygame.sprite.Group()
         self.birds = pygame.sprite.Group()
@@ -243,6 +244,8 @@ class Game:
             self.player_images_walk_l.append(pygame.transform.flip(image, True, False))
         # 새 이미지 불러오기
         self.birds_images = [pygame.image.load(f'../png/bird ({x}).png').convert_alpha() for x in range(1, 6)]
+        for image in self.birds_images:
+            self.birds_images[self.birds_images.index(image)] = pygame.transform.scale(image, (100, 50))
 
     def run(self):
         self.opening()
@@ -260,11 +263,13 @@ class Game:
             if event.type == pygame.QUIT:
                 self.playing = False
             # 마우스 버튼이 구름 클릭시 구름 제거
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                for cloud in self.clouds:
-                    if cloud.click():
-                        self.clouds.remove(cloud)
-                        del cloud
+            # if event.type == pygame.MOUSEBUTTONDOWN:
+            #     for cloud in self.clouds:
+            #         if cloud.click():
+            #             self.clouds.remove(cloud)
+            #             # self.all_sprites.remove(cloud)
+            #             # cloud.kill()
+            #             del cloud
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_q:
                     self.playing = False
@@ -273,8 +278,13 @@ class Game:
         self.pressed_key = pygame.key.get_pressed()
         while len(self.clouds) < CLOUD_NUMBER:
             self.clouds.add(Cloud(random.randint(1, 20) * SCREEN_X / 20, self))
+            self.all_sprites.add(Cloud(random.randint(1, 20) * SCREEN_X / 20, self))
         while len(self.birds) < CLOUD_NUMBER:
             self.birds.add(Bird(0, random.randint(1, 20) * SCREEN_Y / 20, self))
+            self.all_sprites.add(Bird(0, random.randint(1, 20) * SCREEN_Y / 20, self))
+        if not self.all_sprites.has(self.player):
+            self.all_sprites.add(self.player, layer=self.player.layer)
+        print(len(self.all_sprites), len(self.birds), len(self.clouds), len(self.rains))
         self.all_sprites.update()
 
     def draw(self):
