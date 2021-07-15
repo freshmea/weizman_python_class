@@ -15,8 +15,6 @@ CHARACTER_SPEED = 5
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, root):
-        self.dx = 0
-        self.dy = 0
         self.game = root
         pygame.sprite.Sprite.__init__(self)
         self.image = root.player_images_idle_r[0]
