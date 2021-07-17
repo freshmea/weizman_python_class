@@ -2,6 +2,7 @@
 import pygame
 import random
 from pygame.locals import *
+
 vec = pygame.math.Vector2
 # 전역상수
 SCREEN_X = 640 * 2  # 화면 넓이
@@ -10,6 +11,10 @@ FPS = 60
 CLOUD_NUMBER = 10
 RAIN_NUMBER = 1
 TITLE = '구름에서 비가 내리는 게임'
+PLAYER_JUMP = 20
+PLAYER_GRAV = 0.8
+PLAYER_ACC = 0.5
+PLAYER_FRICTION = -0.1
 
 
 class Player(pygame.sprite.Sprite):
@@ -26,21 +31,18 @@ class Player(pygame.sprite.Sprite):
         self.walking_r = False
         self.walking_l = False
         self.jumping = False
-        self.jumpa = 0
-        self.pos = vec(SCREEN_X / 2, SCREEN_Y / 2)
+        self.pos = vec(SCREEN_X / 2, SCREEN_Y * 17 / 20)
         self.vel = vec(0, 0)
         self.acc = vec(0, 0)
         self.images = self.game.player_images_walk_r
         self.mask = pygame.mask.from_surface(self.image)
-        self.layer = 2
+        self._layer = 2
         self.booster = 0
         self.character_speed = 5
 
     def update(self):
         self.animation()
         self.move()
-        if self.booster == 1:
-            self.character_speed = 10
 
     def animation(self):
         if self.jumping:
@@ -65,43 +67,49 @@ class Player(pygame.sprite.Sprite):
         if self.index > len(self.images) - 1:
             self.index = 0
         if self.booster == 1:
-            self.image = pygame.transform.scale2x(self.image)
+            self.image = pygame.transform.rotozoom(self.image,0, 1.5)
         self.mask = pygame.mask.from_surface(self.image)
 
     def move(self):
+        # 중력
+        self.acc = vec(0, PLAYER_GRAV)
+        # 좌우 움직임
         if self.game.pressed_key[K_LEFT] and self.rect.centerx > 0:
-            self.rect.centerx += -self.character_speed
+            self.acc.x = -PLAYER_ACC
             self.walking_l = True
         else:
             self.walking_l = False
         if self.game.pressed_key[K_RIGHT] and self.rect.centerx < SCREEN_X - 160:
-            self.rect.centerx += self.character_speed
+            self.acc.x = PLAYER_ACC
             self.walking_r = True
         else:
             self.walking_r = False
+        # 바닥 충돌 확인
+        if self.vel.y > -1:
+            for tile in self.game.tiles:
+                if pygame.sprite.collide_mask(self, tile):
+                    if self.pos.y < tile.rect.centery + 20:
+                        self.vel.y = 0
+                        self.acc.y = 0
+                        self.jumping = False
+        # 마찰력 적용
+        self.acc.x += self.vel.x * PLAYER_FRICTION
+        # 점프 적용
         if self.jumping:
             self.jump()
 
+        #움직임 기본
+        self.vel += self.acc
+        self.pos += self.vel
+        self.rect.midbottom = self.pos
 
     def jump(self):
-        self.jumping = True
-        if self.jumpa < 100:
-            self.jumpa += 1
-        else:
-            self.jumpa = 0
-            self.jumping = False
-            self.index = 0
-        if self.jumpa < 50:
-            self.rect.centery -= self.character_speed
-        else:
-            self.rect.centery += self.character_speed
-        if self.rect.centery > SCREEN_Y - 200:
-            self.jumpa = 0
-            self.jumping = False
-            self.index = 0
-            self.rect.centery = SCREEN_Y - 200
-            if self.booster == 1:
-                self.rect.centery -= 200
+        self.rect.y += 20
+        hits = pygame.sprite.spritecollide(self, self.game.tiles, False)
+        self.rect.y -= 20
+        if hits and not self.jumping:
+            self.jumping = True
+            self.vel.y = -PLAYER_JUMP
 
     def hit_by(self, rain):
         return pygame.sprite.collide_mask(self, rain)
@@ -113,11 +121,12 @@ class Tile(pygame.sprite.Sprite):
         self.groups = self.game.all_sprites, self.game.tiles
         pygame.sprite.Sprite.__init__(self, self.groups)
         self.images = self.game.tile_images
-        self.image = self.images[k-1]
+        self.image = self.images[k - 1]
         self.rect = self.image.get_rect()
         self.rect.centerx = x
         self.rect.centery = y
         self._layer = 2
+        self.mask = pygame.mask.from_surface(self.image)
 
 
 class Rain(pygame.sprite.Sprite):
@@ -268,19 +277,19 @@ class Game:
         self.player = Player(self)
         self.pressed_key = pygame.key.get_pressed()
         self.clear = False
-        self.data = [[6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                     [6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                     [6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                     [6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                     [6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                     [6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                     [6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                     [6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                     [6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                     [6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                     [6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                     [6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                     [6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+        self.data = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 14, 14, 14, 15, 0],
+                     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                     [0, 0, 0, 0, 0, 0, 0, 13, 14, 14, 14, 14, 14, 15, 0, 0, 0, 0, 0, 0],
+                     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                     [0, 0, 13, 14, 14, 14, 14, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 14, 14, 14, 15, 0, 0, 0],
+                     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                      [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3],
                      [4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6],
                      ]
@@ -371,11 +380,11 @@ class Game:
             self.all_sprites.add(Bird(0, random.randint(1, 20) * SCREEN_Y / 20, self))
         while len(self.boosters.sprites()) < 2:
             self.boosters.add(
-                Booster(random.randint(1, 20) * SCREEN_X / 20, random.randint(1, 20) * 20 + SCREEN_Y - 600, self))
+                Booster(random.randint(1, 20) * SCREEN_X / 20, SCREEN_Y / 20, self))
             self.all_sprites.add(
-                Booster(random.randint(1, 20) * SCREEN_X / 20, random.randint(1, 20) * 20 + SCREEN_Y - 600, self))
+                Booster(random.randint(1, 20) * SCREEN_X / 20, SCREEN_Y / 20, self))
         if not self.all_sprites.has(self.player):
-            self.all_sprites.add(self.player, layer=self.player.layer)
+            self.all_sprites.add(self.player, layer=self.player._layer)
         self.all_sprites.update()
 
     def make_tiles(self):
