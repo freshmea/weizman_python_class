@@ -180,8 +180,8 @@ class Game:
         stop = True
         self.draw_text(f'스페이스 바를 누르면 게임이 시작 됩니다.', 30, pygame.Color('hotpink'), 100, SCREEN_Y * 1 / 20)
         self.draw_text(f'구름을 클릭하면 구름이 사라집니다.', 30, pygame.Color('hotpink'), 100, SCREEN_Y * 2 / 20)
-        self.draw_text(f'방향키로 공룡을 조작합니다.', 30, pygame.Color('hotpink'), 100, SCREEN_Y * 34 / 20)
-        self.draw_text(f'q를 누르면 게임이 끝납니다.', 30, pygame.Color('hotpink'), 100, SCREEN_Y * 3 / 20)
+        self.draw_text(f'방향키로 공룡을 조작합니다.', 30, pygame.Color('hotpink'), 100, SCREEN_Y * 3 / 20)
+        self.draw_text(f'q를 누르면 게임이 끝납니다.', 30, pygame.Color('hotpink'), 100, SCREEN_Y * 4 / 20)
         pygame.display.flip()
         while stop:
             self.clock.tick(60)

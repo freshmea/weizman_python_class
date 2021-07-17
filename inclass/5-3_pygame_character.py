@@ -18,8 +18,8 @@ class Player:
         self.y = SCREEN_Y-200
         self.dx = 0
         self.dy = 0
-        self.root = root
-        self.image = root.player_image
+        self.game = root
+        self.image = self.game.player_image
         self.hit = 0
 
     def move(self, key):
@@ -124,16 +124,19 @@ class Game:
         self.image_background = pygame.transform.scale(self.image_background, (SCREEN_X, SCREEN_Y))
         # 구름그림 불러오기
         self.image_cloud = pygame.image.load('../images/cloud.svg').convert_alpha()
+        # 플레이어 이미지 불러오기.
         self.player_image = pygame.image.load('../images/dino.png').convert_alpha()
         self.player_image = pygame.transform.scale(self.player_image, (260,200))
 
     def run(self):
+        self.opening()
         while self.playing:
             self.clock.tick(FPS)
             self.event()
             self.update()
             self.draw()
             pygame.display.update()
+        self.ending()
 
     def event(self):
         # 종료 코드 및 플레이어 움직임
