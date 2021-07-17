@@ -241,7 +241,6 @@ class Booster(pygame.sprite.Sprite):
         return pygame.sprite.collide_mask(self, self.game.player)
 
 
-
 class Game:
     def __init__(self):
         pygame.init()
