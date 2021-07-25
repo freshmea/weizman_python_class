@@ -1,6 +1,4 @@
-# 파이게임 비 내리는 코드(클래스)
-# 키보드를 누룰 때 지속적으로 움직이게 하는 코드 입니다.
-# 수업 중에 작성한 코드와 다른 부분을 찾아서 자기 코드를 고쳐 보세요.
+# 과제 3_1 번에 Birds 적용한 코드 (4_1 과제 할 때 참고하기)
 
 import pygame
 import random
@@ -14,6 +12,40 @@ CLOUD_NUMBER = 10
 RAIN_NUMBER = 5
 TITLE = '구름에서 비가 내리는 게임'
 CHARACTER_SPEED = 5
+
+class Bird(pygame.sprite.Sprite):
+    def __init__(self, x, y, root):
+        self.game = root
+        self.groups = self.game.birds
+        pygame.sprite.Sprite.__init__(self, self.groups)
+        self.images = self.game.birds_images
+        self.image = self.images[0]
+        self.rect = self.image.get_rect()
+        self.rect.centerx = x
+        self.rect.centery = y
+        self.speed = random.randint(3, 20)
+        self.index = 0
+        self.now = 0
+
+    def update(self):
+        self.animate()
+        self.move()
+
+    def animate(self):
+        if pygame.time.get_ticks() - self.now > 100:
+            self.now = pygame.time.get_ticks()
+            self.image = self.game.birds_images[self.index]
+            self.index += 1
+        if self.index > len(self.images) - 1:
+            self.index = 0
+
+    def move(self):
+        self.rect.centerx += self.speed
+        self.rect.centery -= int(self.speed / random.randint(1, 5))
+        if self.rect.centerx > SCREEN_X:
+            self.kill()
+            del self
+
 
 
 class Player:
@@ -103,6 +135,7 @@ class Game:
         self.load_data()
         self.rains = []
         self.clouds = []
+        self.birds = pygame.sprite.Group() # bird 클래스 만들기
         self.player = Player(self)
         self.pressed_key = pygame.key.get_pressed()
 
@@ -114,6 +147,10 @@ class Game:
         self.image_cloud = pygame.image.load('images/cloud.svg').convert_alpha()
         self.player_image = pygame.image.load('images/dino.png').convert_alpha()
         self.player_image = pygame.transform.scale(self.player_image, (260, 200))
+        # 새 이미지 불러오고 크기 조정하기
+        self.birds_images = [pygame.image.load(f'png/bird ({x}).png').convert_alpha() for x in range(1, 6)]
+        for image in self.birds_images:
+            self.birds_images[self.birds_images.index(image)] = pygame.transform.scale(image, (100, 50))
 
     def run(self):
         self.opening()
@@ -163,6 +200,11 @@ class Game:
                 self.player.hit += 1
                 self.rains.remove(rain)
                 del rain
+        # 새 클래스를 만들고 스프라이트에 넣기
+        while len(self.birds.sprites()) < 10:
+            self.birds.add(Bird(0, random.randint(1, 20) * SCREEN_Y / 20, self))
+        # 모든 스프라이트 업데이트
+        self.birds.update()
 
     def draw(self):
         # self.screen.fill((255, 255, 255))
@@ -177,6 +219,8 @@ class Game:
             rain.draw()
         # 플레이어 그리기
         self.player.draw()
+        # 모든 스프라이트 그리기
+        self.birds.draw(self.screen)
 
     def opening(self):
         self.screen.fill(pygame.Color('black'))

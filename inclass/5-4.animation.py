@@ -285,7 +285,7 @@ class Game:
         while len(self.clouds) < CLOUD_NUMBER:
             self.clouds.add(Cloud(random.randint(1, 20) * SCREEN_X / 20, self))
             self.all_sprites.add(Cloud(random.randint(1, 20) * SCREEN_X / 20, self))
-        while len(self.birds.sprites()) < CLOUD_NUMBER:
+        while len(self.birds.sprites()) < 10:
             self.birds.add(Bird(0, random.randint(1, 20) * SCREEN_Y / 20, self))
             self.all_sprites.add(Bird(0, random.randint(1, 20) * SCREEN_Y / 20, self))
         if not self.all_sprites.has(self.player):
