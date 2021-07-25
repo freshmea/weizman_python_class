@@ -1,5 +1,6 @@
 # 날아다니는 새 에니메이션 추가 하기
 # 자신의 게임 코드에 넣어서 추가해 보세요.
+# 새 이미지는 png/bird (1).png, png/bird (2).png,png/bird (3).png, png/bird (4).png, png/bird (5).png,
 
 # Bird 클래스 만들기(스프라이트 클래스 상속)
 class Bird(pygame.sprite.Sprite):
