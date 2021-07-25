@@ -339,7 +339,7 @@ class Game:
             self.boosters.add(Booster(random.randint(1, 20) * SCREEN_X / 20, random.randint(1, 20)*20+SCREEN_Y-600, self))
             self.all_sprites.add(Booster(random.randint(1, 20) * SCREEN_X / 20, random.randint(1, 20)*20 + SCREEN_Y-600, self))
         if not self.all_sprites.has(self.player):
-            self.all_sprites.add(self.player, layer=self.player.layer)
+            self.all_sprites.add(self.player)
         self.all_sprites.update()
 
     def draw(self):

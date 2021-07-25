@@ -98,11 +98,11 @@ class Game:
         self.dino = Dino(self)
 
     def load_data(self):
-        self.image = pygame.image.load('images/back.png').convert_alpha()
+        self.image = pygame.image.load('../images/back.png').convert_alpha()
         self.image = pygame.transform.scale(self.image, (SCREEN_X, SCREEN_Y))
-        self.image_dino = pygame.image.load('images/dino.png').convert_alpha()
+        self.image_dino = pygame.image.load('../images/dino.png').convert_alpha()
         self.image_dino = pygame.transform.scale(self.image_dino, (260,200))
-        self.image_cloud = pygame.image.load('images/cloud.svg').convert_alpha()
+        self.image_cloud = pygame.image.load('../images/cloud.svg').convert_alpha()
 
     def run(self):
         while self.playing:
