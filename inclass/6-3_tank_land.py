@@ -26,6 +26,7 @@ class Tank(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self, self.groups)
         self.po = Po(self.game, self.rect.center, color, self._layer - 1, self)
         self.game.all_sprites.add(self.po)
+        self.move_p = 100
 
     def update(self):
         # 중력 효과
@@ -35,15 +36,19 @@ class Tank(pygame.sprite.Sprite):
             self.dir = vec(0, 0)
 
         gab = self.game.land.pos - self.pos
-        if self.game.pressed_key[pygame.K_LEFT] and self.game.tanks[self.game.lock] == self and self.mask.overlap_area(
-                self.game.land.mask, (int(gab[0]), int(gab[1]))) < 300:
-            self.dir.x = -1
-        if self.game.pressed_key[pygame.K_RIGHT] and self.game.tanks[self.game.lock] == self and self.mask.overlap_area(
-                self.game.land.mask, (int(gab[0]), int(gab[1]))) < 300:
-            self.dir.x = 1
-        if self.game.pressed_key[pygame.K_SPACE] and self.game.tanks[self.game.lock] == self and self.mask.overlap_area(
-                self.game.land.mask, (int(gab[0]), int(gab[1]))) > 100:
-            self.dir.y = -1
+        if self.move_p >0:
+            if self.game.pressed_key[pygame.K_LEFT] and self.game.tanks[self.game.lock] == self and self.mask.overlap_area(
+                    self.game.land.mask, (int(gab[0]), int(gab[1]))) < 150:
+                self.dir.x = -1
+                self.move_p -= 1
+            if self.game.pressed_key[pygame.K_RIGHT] and self.game.tanks[self.game.lock] == self and self.mask.overlap_area(
+                    self.game.land.mask, (int(gab[0]), int(gab[1]))) < 150:
+                self.dir.x = 1
+                self.move_p -= 1
+            if self.game.pressed_key[pygame.K_SPACE] and self.game.tanks[self.game.lock] == self and self.mask.overlap_area(
+                    self.game.land.mask, (int(gab[0]), int(gab[1]))) > 100:
+                self.dir.y = -0.4
+                self.move_p -= 1
         if self.pos.y > SCREEN_Y:
             self.game.playing = False
 
@@ -155,7 +160,7 @@ class Game:
         self.pressed_key = pygame.key.get_pressed()
         for _ in range(PLAYER_NUMBER):
             self.tanks.append(
-                Tank(self, vec(0, 0), (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)), 2))
+                Tank(self, vec(random.randint(0,SCREEN_X), 0), (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)), 2))
 
         self.all_sprites.add(x for x in self.tanks)
         self.land = Land(self, 0)
@@ -181,6 +186,7 @@ class Game:
                     self.lock += 1
                     if self.lock > PLAYER_NUMBER - 1:
                         self.lock = 0
+                    self.tanks[self.lock].move_p = 100
 
     def update(self):
         self.pressed_key = pygame.key.get_pressed()
