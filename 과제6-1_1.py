@@ -68,7 +68,6 @@ class Figure(pygame.sprite.Sprite):
     def col(self):
         self.dir = self.dir * -1
         self.col_lim += 1
-        print(self.col_lim)
 
     def reset(self):
         self.dir = pygame.Vector2(random.random() * 2 - 1, random.random() * 2 - 1)
