@@ -1,60 +1,47 @@
-# 파이게임 비 내리는 코드(클래스)
-import pygame
-import random
+# # 파이게임 기본(클래스)
 
-# 변수
+import pygame, random
+
+# 전역상수
 SCREEN_X = 640 * 2  # 화면 넓이
 SCREEN_Y = 480 * 2  # 화면 높이
 FPS = 60
+GRAVITY = 0.3
 
-
-class Cloud:
-    def __init__(self, x, root):
-        self.x = x
-        self.y = random.randint(0, 200)
-        self.image = root.image_cloud
+class Figure(pygame.sprite.Sprite):
+    def __init__(self, root):
         self.game = root
-        self.speed = random.randint(3, 10)
+        self.image = pygame.Surface((30, 30))
+        self.image.fill((255,0,0))
+        self.rect = self.image.get_rect()
+        self.groups = self.game.all_sprites
+        pygame.sprite.Sprite.__init__(self, self.groups)
+        self.pos = pygame.Vector2(random.randint(0, SCREEN_X), random.randint(0, SCREEN_Y))
+        self.dir = pygame.Vector2(random.random()*2-1, random.random()*2-1)
+        self.speed = 2
 
-    def move(self):
-        self.x += self.speed
-        if self.x > SCREEN_X:
-            self.x = 0
+    def update(self):
+        if self.game.pressed_key[pygame.K_SPACE]:
+            self.dir.y += GRAVITY
+            self.pos += self.dir * self.speed
+            if self.pos.y > SCREEN_Y:
+                self.pos.y = SCREEN_Y-10
+            self.rect.center = self.pos
+        else:
+            if self.pos.x >SCREEN_X:
+                self.dir = pygame.Vector2(random.random() * 2 - 1, random.random() * 2 - 1)
+            if self.pos.x < 0 :
+                self.dir = pygame.Vector2(random.random() * 2 - 1, random.random() * 2 - 1)
+            if self.pos.y > SCREEN_Y:
+                self.dir = pygame.Vector2(random.random() * 2 - 1, random.random() * 2 - 1)
+            if self.pos.y < 0:
+                self.dir = pygame.Vector2(random.random() * 2 - 1, random.random() * 2 - 1)
+            self.dir = self.dir.normalize()
+            self.pos += self.dir * self.speed
+            self.rect.center = self.pos
 
-    def draw(self):
-        self.game.screen.blit(self.image, (self.x, self.y))
-
-    def rain(self):
-        self.game.rains.append(Rain(self.x + random.randint(0, 130), self.y + 70, self.game))
-
-    def click(self):
-        pos = pygame.mouse.get_pos()
-        rect = self.image.get_rect()
-        rect.x = self.x
-        rect.y = self.y
-        return rect.collidepoint(pos)
-
-
-class Rain:
-    def __init__(self, x, y, game):
-        self.x = x
-        self.y = y
-        self.speed = random.randint(5, 28)
-        self.bold = random.randint(1, 4)
-        self.game = game
-        self.len = random.randint(5, 15)
-        self.color = pygame.Color('skyblue')
-
-    def move(self):
-        self.y += self.speed
-        self.x += 4
-
-    def off_screen(self):
-        return self.y > SCREEN_Y
-
-    def draw(self):
-        pygame.draw.line(self.game.screen, self.color, (self.x, self.y), (self.x, self.y + self.len), self.bold)
-
+    def col(self):
+        self.dir = pygame.Vector2(random.random() * 2 - 1, random.random() * 2 - 1)
 
 class Game:
     def __init__(self):
@@ -63,14 +50,11 @@ class Game:
         self.screen = pygame.display.set_mode((SCREEN_X, SCREEN_Y))  # 화면 세팅
         self.clock = pygame.time.Clock()  # 시계 지정
         self.playing = True
-        self.rains = []
-        self.clouds = []
-        self.load_data()
+        self.all_sprites = pygame.sprite.Group()
+        for _ in range(10):
+            self.all_sprites.add(Figure(self))
+        self.bomb =pygame.mixer.Sound('wave/2001_key1.mp3')
 
-    def load_data(self):
-        self.image = pygame.image.load('images/back.png').convert_alpha()
-        self.image = pygame.transform.scale(self.image, (SCREEN_X, SCREEN_Y))
-        self.image_cloud = pygame.image.load('images/cloud.svg').convert_alpha()
 
     def run(self):
         while self.playing:
@@ -81,39 +65,26 @@ class Game:
             pygame.display.update()
 
     def event(self):
+        self.pressed_key = pygame.key.get_pressed()
+        # 종료 코드
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.playing = False
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                for cloud in self.clouds:
-                    if cloud.click():
-                        self.clouds.remove(cloud)
-                        del cloud
+        for figure in self.all_sprites:
+            re = pygame.sprite.spritecollide(figure, self.all_sprites, False)
+            for a in re:
+                if not figure == a:
+                    pygame.mixer.Sound.play(self.bomb)
+                    figure.col()
+                    a.col()
+
 
     def update(self):
-        # 구름 생성
-        while len(self.clouds) < 10:
-            self.clouds.append(Cloud(random.randint(0, SCREEN_X), self))
-        # 구름에서 비 내리기
-        for cloud in self.clouds:
-            cloud.rain()
-        # 비 움직이게 하고 벗어나면 삭제
-        for rain in self.rains:
-            rain.move()
-            if rain.off_screen():
-                self.rains.remove(rain)
-                del rain
-        # 구름 움직이기
-        for cloud in self.clouds:
-            cloud.move()
+        self.all_sprites.update()
 
     def draw(self):
-        self.screen.fill((255, 255, 255))
-        self.screen.blit(self.image, (0, 0))
-        for rain in self.rains:
-            rain.draw()
-        for cloud in self.clouds:
-            cloud.draw()
+        self.screen.fill((0,0,0))
+        self.all_sprites.draw(self.screen)
 
 
 game = Game()
