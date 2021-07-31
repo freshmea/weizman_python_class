@@ -5,12 +5,14 @@
 # 색깔과 직사각형 모양 랜덤으로 만들기
 # 볼륨 줄이기
 # 스페이스 바를 놓았을 때 랜덤 으로 방향 설정
-# 사각형 객체가 100개 이하가 되면 다시 생성
-
+# 사각형 객체가 20개 이하가 되면 다시 생성
+# 배경화면 추가해서 화면에 맞추어서 늘리기
 
 # 각각을 지정한 코드에 주석을 달아서 코드를 완성하세요.
 # 스페이스바를 연속으로 눌러 보세요.
-import pygame, random
+
+import pygame
+import random
 
 # 전역상수
 SCREEN_X = 640 * 2  # 화면 넓이
@@ -59,13 +61,14 @@ class Figure(pygame.sprite.Sprite):
             self.pos += self.dir * self.speed
             self.rect.center = self.pos
 
-        if self.col_lim > 400:
+        if self.col_lim > 3:
             self.kill()
             del self
 
     def col(self):
         self.dir = self.dir * -1
         self.col_lim += 1
+        print(self.col_lim)
 
     def reset(self):
         self.dir = pygame.Vector2(random.random() * 2 - 1, random.random() * 2 - 1)
@@ -79,8 +82,6 @@ class Game:
         self.clock = pygame.time.Clock()  # 시계 지정
         self.playing = True
         self.all_sprites = pygame.sprite.Group()
-        for _ in range(400):
-            self.all_sprites.add(Figure(self))
         self.bomb = pygame.mixer.Sound('wave/2001_key1.mp3')
         self.bomb.set_volume(0.1)
         self.back = pygame.image.load('images/starfalling.jpg')
@@ -111,7 +112,7 @@ class Game:
                     figure.col()
 
     def update(self):
-        if len(self.all_sprites) < 200:
+        if len(self.all_sprites) < 20:
             self.all_sprites.add(Figure(self))
         self.all_sprites.update()
 
