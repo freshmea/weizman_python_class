@@ -100,14 +100,15 @@ class Po(pygame.sprite.Sprite):
         self.pos = self.tank.rect.center
         self.rect.center = self.pos
 
-        if self.game.pressed_key[pygame.K_UP] and self.game.tanks[self.game.lock] == self.tank:
-            self.angle += 1
-        if self.game.pressed_key[pygame.K_DOWN] and self.game.tanks[self.game.lock] == self.tank:
-            self.angle -= 1
-        if self.angle > 360:
-            self.angle -= 360
-        if self.angle < 0:
-            self.angle += 360
+        # if self.game.pressed_key[pygame.K_UP] and self.game.tanks[self.game.lock] == self.tank:
+        #     self.angle += 1
+        # if self.game.pressed_key[pygame.K_DOWN] and self.game.tanks[self.game.lock] == self.tank:
+        #     self.angle -= 1
+        # if self.angle > 360:
+        #     self.angle -= 360
+        # if self.angle < 0:
+        #     self.angle += 360
+        self.angle = vec(0,0).angle_to(pygame.mouse.get_pos()-self.tank.pos)*-1
         self.image = pygame.transform.rotozoom(self.image_t, self.angle, 1)
         self.image.set_colorkey((0, 0, 0))
         self.rect = self.image.get_rect(center=self.pos)

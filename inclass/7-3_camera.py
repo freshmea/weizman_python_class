@@ -402,7 +402,6 @@ class Game:
         elif SCREEN_X*3/4 < self.player.rect.x:
             self.camera.offset_x = self.player.character_speed
             self.player.pos[0] -= self.player.character_speed
-            print(self.player.rect.x)
         else:
             self.camera.offset_x =0
 
@@ -421,7 +420,6 @@ class Game:
                             self.all_sprites.add(Tile(self, i * 64 + 32+a, j * 64 + 32, k))
                             self.tiles.add(Tile(self, i * 64 + 32+a, j * 64 + 32, k))
             a += SCREEN_X
-            print(len(self.all_sprites.sprites()))
 
     def draw(self):
         # 배경화면 그리기

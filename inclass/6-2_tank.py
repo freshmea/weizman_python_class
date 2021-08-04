@@ -13,14 +13,15 @@ class Tank(pygame.sprite.Sprite):
     def __init__(self, root, pos, color, layer):
         self.game = root
         self.groups = self.game.all_sprites
-        self.image = pygame.Surface((60, 20))
-        self.image.fill(color)
+        self.image = pygame.image.load('../png/tank.png')
+        self.image = pygame.transform.scale(self.image, (200, 100))
         self.pos = pos
         self.dir = vec(random.random(), random.random()).normalize()
         self.speed = 3
         self.rect = self.image.get_rect(topleft=pos)
         self._layer = layer
         pygame.sprite.Sprite.__init__(self, self.groups)
+        self.mask = pygame.mask.from_surface(self.image)
         self.po = Po(self.game, self.rect.center, color, self._layer - 1, self)
         self.game.all_sprites.add(self.po)
 
@@ -38,7 +39,7 @@ class Tank(pygame.sprite.Sprite):
         if self.game.pressed_key[pygame.K_RIGHT]:
             self.dir.x += 1
         self.pos += self.dir * self.speed
-        self.rect.topleft = self.pos
+        self.rect.midbottom = self.pos
 
 
 class Po(pygame.sprite.Sprite):
@@ -54,6 +55,7 @@ class Po(pygame.sprite.Sprite):
         self.image_t.blit(self.image_t2, (-60, 0))
         self.angle = 0
         self.image = pygame.transform.rotozoom(self.image_t, self.angle, 1)
+        self.image.set_colorkey((0,0,0))
         self.pos = pos
         self.speed = 3
         self.rect = self.image.get_rect(center=pos)
@@ -63,16 +65,20 @@ class Po(pygame.sprite.Sprite):
     def update(self):
         self.pos = self.tank.rect.center
         self.rect.center = self.pos
+        # # 위아래 키를 눌렀을 때 포가 움직이기
+        # if self.game.pressed_key[pygame.K_UP]:
+        #     self.angle += 1
+        # if self.game.pressed_key[pygame.K_DOWN]:
+        #     self.angle -= 1
+        # if self.angle > 360:
+        #     self.angle -= 360
+        # if self.angle < 0:
+        #     self.angle += 360
+        # 마우스의 좌표로 포가 움직이기
+        self.angle = vec(0,0).angle_to(pygame.mouse.get_pos()-self.tank.pos)*-1
 
-        if self.game.pressed_key[pygame.K_UP]:
-            self.angle += 1
-        if self.game.pressed_key[pygame.K_DOWN]:
-            self.angle -= 1
-        if self.angle > 360:
-            self.angle -= 360
-        if self.angle < 0:
-            self.angle += 360
-        self.image = pygame.transform.rotozoom(self.image_t, self.angle, 1)
+        self.image = pygame.transform.rotozoom(self.image_t, self.angle, 1).convert_alpha()
+        self.image.set_colorkey((0,0,0))
         self.rect = self.image.get_rect(center=self.pos)
 
     def fire(self):
@@ -85,7 +91,7 @@ class Bul(pygame.sprite.Sprite):
         self.game = root
         self.tank = tankt
         self.groups = self.game.all_sprites
-        self.image = pygame.Surface((50, 50))
+        self.image = pygame.Surface((5, 5))
         self.color = color
         self.image.fill(self.color)
         self.angle = angle
@@ -116,6 +122,9 @@ class Game:
         self.playing = True
         self.all_sprites = pygame.sprite.LayeredUpdates()
         self.pressed_key = pygame.key.get_pressed()
+        pygame.mixer.music.load('../wave/are_you_sure.wav')
+        pygame.mixer.music.play(-1)
+        pygame.mixer.music.set_volume(2)
 
     def run(self):
         self.tank=Tank(self, vec(0, 0), (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)), 2)
@@ -141,7 +150,7 @@ class Game:
         self.all_sprites.update()
 
     def draw(self):
-        self.screen.fill('Black')
+        self.screen.fill('red')
         self.all_sprites.draw(self.screen)
 
 
