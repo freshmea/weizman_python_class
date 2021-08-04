@@ -46,12 +46,12 @@ class Po(pygame.sprite.Sprite):
         self.game = root
         self.tank = tankt
         self.groups = self.game.all_sprites
-        self.image_t = pygame.Surface((160, 5))
+        self.image_t = pygame.Surface((120, 5))
         self.color = color
         self.image_t.fill(self.color)
-        self.image_t2 = pygame.Surface((160, 5))
+        self.image_t2 = pygame.Surface((120, 5))
         self.image_t2.fill('Black')
-        self.image_t.blit(self.image_t2, (-80, 0))
+        self.image_t.blit(self.image_t2, (-60, 0))
         self.angle = 0
         self.image = pygame.transform.rotozoom(self.image_t, self.angle, 1)
         self.pos = pos
@@ -85,11 +85,11 @@ class Bul(pygame.sprite.Sprite):
         self.game = root
         self.tank = tankt
         self.groups = self.game.all_sprites
-        self.image = pygame.Surface((5, 5))
+        self.image = pygame.Surface((50, 50))
         self.color = color
         self.image.fill(self.color)
         self.angle = angle
-        self.pos = pos
+        self.pos = pos + vec(self.tank.po.image_t.get_width()/2, self.tank.po.image_t.get_height()/2).rotate(self.angle*-1)
         self.vel = a.rotate(self.angle*-1)
         self.speed = 5
         self.gravity = 0.01
