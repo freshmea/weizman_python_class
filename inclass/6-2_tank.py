@@ -14,7 +14,7 @@ class Tank(pygame.sprite.Sprite):
         self.game = root
         self.groups = self.game.all_sprites
         self.image = pygame.image.load('../png/tank.png')
-        self.image = pygame.transform.scale(self.image, (200, 100))
+        self.image = pygame.transform.scale(self.image, (600, 300))
         self.pos = pos
         self.dir = vec(random.random(), random.random()).normalize()
         self.speed = 3
@@ -28,9 +28,9 @@ class Tank(pygame.sprite.Sprite):
     def update(self):
         # 중력 효과
         self.gravity = 1
-        if self.pos.y > SCREEN_Y - 100:
+        if self.pos.y > SCREEN_Y - 50:
             self.gravity = 0
-            self.pos.y = SCREEN_Y - 99
+            self.pos.y = SCREEN_Y - 49
             self.dir = vec(0, 0)
         self.dir.y += self.gravity
 
@@ -47,17 +47,21 @@ class Po(pygame.sprite.Sprite):
         self.game = root
         self.tank = tankt
         self.groups = self.game.all_sprites
-        self.image_t = pygame.Surface((120, 5))
+        self.image_t = pygame.Surface((180, 15))
         self.color = color
-        self.image_t.fill(self.color)
-        self.image_t2 = pygame.Surface((120, 5))
+        # self.image_t.fill(self.color)
+        self.image_t2 = pygame.Surface((180, 15))
         self.image_t2.fill('Black')
-        self.image_t.blit(self.image_t2, (-60, 0))
+        self.image_t.blit(self.image_t2, (-90, 0))
+        self.image_t3 = pygame.image.load('../png/po.png').convert_alpha()
+        self.image_t3 = pygame.transform.scale(self.image_t3, (90, 15))
+        self.image_t.blit(self.image_t3, (90,0))
         self.angle = 0
         self.image = pygame.transform.rotozoom(self.image_t, self.angle, 1)
         self.image.set_colorkey((0,0,0))
         self.pos = pos
         self.speed = 3
+        self.t_time = 0
         self.rect = self.image.get_rect(center=pos)
         self._layer = layer
         pygame.sprite.Sprite.__init__(self, self.groups)
@@ -81,23 +85,29 @@ class Po(pygame.sprite.Sprite):
         self.image.set_colorkey((0,0,0))
         self.rect = self.image.get_rect(center=self.pos)
 
-    def fire(self):
-        self.game.all_sprites.add(Bul(self.game, self.pos, self.color, self._layer +1, self.tank, self.angle))
+    def fire(self, check):
+        print(check)
+        if check:
+            self.t_time = pygame.time.get_ticks()
+        if not check:
+            self.speed = (pygame.time.get_ticks()-self.t_time)/100
+            print(self.speed)
+            self.game.all_sprites.add(Bul(self.game, self.pos, self.color, self._layer +1, self.tank, self.angle, self.speed))
 
 
 class Bul(pygame.sprite.Sprite):
-    def __init__(self, root, pos, color, layer, tankt, angle):
+    def __init__(self, root, pos, color, layer, tankt, angle, speed):
         a=vec(1,0)
         self.game = root
         self.tank = tankt
         self.groups = self.game.all_sprites
-        self.image = pygame.Surface((5, 5))
+        self.image = pygame.Surface((25, 25))
         self.color = color
         self.image.fill(self.color)
         self.angle = angle
         self.pos = pos + vec(self.tank.po.image_t.get_width()/2, self.tank.po.image_t.get_height()/2).rotate(self.angle*-1)
         self.vel = a.rotate(self.angle*-1)
-        self.speed = 5
+        self.speed = speed
         self.gravity = 0.01
         self.rect = self.image.get_rect(center=pos)
         self._layer = layer
@@ -105,7 +115,6 @@ class Bul(pygame.sprite.Sprite):
 
     def update(self):
         self.vel.y += self.gravity
-        print(self.vel, self.pos)
         self.pos += self.vel * self.speed
         self.rect.center = self.pos
         if self.pos.y > SCREEN_Y:
@@ -122,9 +131,11 @@ class Game:
         self.playing = True
         self.all_sprites = pygame.sprite.LayeredUpdates()
         self.pressed_key = pygame.key.get_pressed()
-        pygame.mixer.music.load('../wave/are_you_sure.wav')
+        pygame.mixer.music.load('../wave/bgsound.mp3')
         pygame.mixer.music.play(-1)
         pygame.mixer.music.set_volume(2)
+        self.bg = pygame.image.load('../images/starfalling.jpg')
+        self.bg = pygame.transform.scale(self.bg, (SCREEN_X, SCREEN_Y))
 
     def run(self):
         self.tank=Tank(self, vec(0, 0), (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)), 2)
@@ -143,14 +154,17 @@ class Game:
                 self.playing = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    self.tank.po.fire()
+                    self.tank.po.fire(True)
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_SPACE:
+                    self.tank.po.fire(False)
 
     def update(self):
         self.pressed_key = pygame.key.get_pressed()
         self.all_sprites.update()
 
     def draw(self):
-        self.screen.fill('red')
+        self.screen.blit(self.bg, (0,0))
         self.all_sprites.draw(self.screen)
 
 
