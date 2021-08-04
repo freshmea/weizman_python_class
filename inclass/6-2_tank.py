@@ -58,7 +58,7 @@ class Po(pygame.sprite.Sprite):
         self.image_t.blit(self.image_t3, (90,0))
         self.angle = 0
         self.image = pygame.transform.rotozoom(self.image_t, self.angle, 1)
-        self.image.set_colorkey((0,0,0))
+        # self.image.set_colorkey((0,0,0))
         self.pos = pos
         self.speed = 3
         self.t_time = 0
