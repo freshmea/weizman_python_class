@@ -23,7 +23,7 @@ class Ball(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self, self.groups)
         self.pos = vec(x, y)
         self.vel = vel
-        self.mass = 5
+        self.mass = 0.02
         self.gravity = vec(0, 0)
 
 
@@ -32,7 +32,7 @@ class Ball(pygame.sprite.Sprite):
         self.gravi()
         self.vel -= self.gravity
         # self.vel -= (self.pos-vec(SCREEN_X/2, SCREEN_Y/2)).normalize()*(self.pos-vec(SCREEN_X/3*2, SCREEN_Y/2)).length()*(self.pos-vec(SCREEN_X/3*2, SCREEN_Y/2)).length()/100000
-        if self.vel.length()>50:
+        if self.vel.length()>30:
             self.kill()
             del self
             return
@@ -69,6 +69,7 @@ class Ball(pygame.sprite.Sprite):
                     self.image.set_colorkey((0, 0, 0))
                     self.rect = self.image.get_rect()
                     self.mass += other.mass
+                    self.vel += other.vel
                     other.kill()
                     del other
                     return True
@@ -85,7 +86,7 @@ class Bball(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self, self.groups)
         self.pos = vec(x, y)
         self.vel = vel
-        self.mass = 50
+        self.mass = 5000
         self.gravity = vec(0, 0)
 
     def update(self):
