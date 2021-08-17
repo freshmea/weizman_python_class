@@ -78,7 +78,6 @@ class Bball(pygame.sprite.Sprite):
         self.size = 50
         self.image = pygame.Surface((self.size * 2, self.size * 2))
         pygame.draw.circle(self.image, 'Blue', (self.size, self.size), self.size)
-        print('Bball')
         self.image.set_colorkey((0, 0, 0))
         self.rect = self.image.get_rect()
         self.game = root
