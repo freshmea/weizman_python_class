@@ -113,7 +113,7 @@ class Ball(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self, self.groups)
         self.pos = vec(x, y)
         self.vel = vel
-        self.mass = 0.02
+        self.mass = 0.006
         self.gravity = vec(0, 0)
 
 
@@ -122,10 +122,10 @@ class Ball(pygame.sprite.Sprite):
         self.gravi()
         self.vel -= self.gravity
         # self.vel -= (self.pos-vec(SCREEN_X/2, SCREEN_Y/2)).normalize()*(self.pos-vec(SCREEN_X/3*2, SCREEN_Y/2)).length()*(self.pos-vec(SCREEN_X/3*2, SCREEN_Y/2)).length()/100000
-        if self.vel.length()>30:
-            self.kill()
-            del self
-            return
+        # if self.vel.length()>30:
+        #     self.kill()
+        #     del self
+        #     return
         self.pos += self.vel
         self.rect.center = self.pos
         if self.pos.x > SCREEN_X:
@@ -151,7 +151,7 @@ class Ball(pygame.sprite.Sprite):
 
     def collide(self):
         for other in self.game.balls:
-            if not (self == other or other == self.game.bball1 or other == self.game.bball2):
+            if not (self == other or other == self.game.bball1):
                 if self.rect.colliderect(other):
                     self.size = (self.size*self.size+other.size*other.size)**0.5
                     self.image = pygame.Surface((self.size * 2, self.size * 2))
@@ -176,7 +176,7 @@ class Bball(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self, self.groups)
         self.pos = vec(x, y)
         self.vel = vel
-        self.mass = 50000
+        self.mass = 1900
         self.gravity = vec(0, 0)
 
     def update(self):
@@ -196,8 +196,9 @@ class Game:
         self.balls = pygame.sprite.Group()
         self.pressed_key = pygame.key.get_pressed()
         self.bball1 = Bball(self, SCREEN_X/3 , SCREEN_Y/2, vec(0,0))
-        self.bball2 = Bball(self, SCREEN_X/3*2 , SCREEN_Y/2, vec(0,0))
-        self.all_sprites.add(self.bball1, self.bball2)
+        #self.bball2 = Bball(self, SCREEN_X/3*2 , SCREEN_Y/2, vec(0,0))
+        #self.all_sprites.add(self.bball1, self.bball2)
+        self.all_sprites.add(self.bball1)
 
 
     def run(self):
