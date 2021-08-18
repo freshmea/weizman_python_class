@@ -23,7 +23,7 @@ class Ball(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self, self.groups)
         self.pos = vec(x, y)
         self.vel = vel
-        self.mass = 0.02
+        self.mass = 10
         self.gravity = vec(0, 0)
 
 
@@ -86,7 +86,7 @@ class Bball(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self, self.groups)
         self.pos = vec(x, y)
         self.vel = vel
-        self.mass = 5000
+        self.mass = 500
         self.gravity = vec(0, 0)
 
     def update(self):
@@ -118,7 +118,7 @@ class Game:
 
     def event(self):
         # 종료 코드
-        if len(self.all_sprites)<60:
+        if len(self.all_sprites)<6:
             self.all_sprites.add(Ball(self, random.randint(0, SCREEN_X), random.randint(0, SCREEN_Y), vec(-1, 0)))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
