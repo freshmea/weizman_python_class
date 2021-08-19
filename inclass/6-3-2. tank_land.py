@@ -36,16 +36,19 @@ class Tank(pygame.sprite.Sprite):
             self.dir = vec(0, 0)
 
         gab = self.game.land.pos - self.pos
-        if self.move_p >0:
-            if self.game.pressed_key[pygame.K_LEFT] and self.game.tanks.sprites()[self.game.lock] == self and self.mask.overlap_area(
+        if self.move_p > 0:
+            if self.game.pressed_key[pygame.K_LEFT] and self.game.tanks.sprites()[
+                self.game.lock] == self and self.mask.overlap_area(
                     self.game.land.mask, (int(gab[0]), int(gab[1]))) < 150:
                 self.dir.x = -1
                 self.move_p -= 1
-            if self.game.pressed_key[pygame.K_RIGHT] and self.game.tanks.sprites()[self.game.lock] == self and self.mask.overlap_area(
+            if self.game.pressed_key[pygame.K_RIGHT] and self.game.tanks.sprites()[
+                self.game.lock] == self and self.mask.overlap_area(
                     self.game.land.mask, (int(gab[0]), int(gab[1]))) < 150:
                 self.dir.x = 1
                 self.move_p -= 1
-            if self.game.pressed_key[pygame.K_SPACE] and self.game.tanks.sprites()[self.game.lock] == self and self.mask.overlap_area(
+            if self.game.pressed_key[pygame.K_SPACE] and self.game.tanks.sprites()[
+                self.game.lock] == self and self.mask.overlap_area(
                     self.game.land.mask, (int(gab[0]), int(gab[1]))) > 100:
                 self.dir.y = -0.4
                 self.move_p -= 1
@@ -91,10 +94,12 @@ class Po(pygame.sprite.Sprite):
         self.image = pygame.transform.rotozoom(self.image_t, self.angle, 1)
         self.image.set_colorkey((0, 0, 0))
         self.pos = pos
-        self.speed = 3
+        self.speed = 0
         self.rect = self.image.get_rect(center=pos)
         self._layer = layer
         pygame.sprite.Sprite.__init__(self, self.groups)
+        self.t_time = pygame.time.get_ticks()
+        self.on_fire = False
 
     def update(self):
         self.pos = self.tank.rect.center
@@ -108,17 +113,27 @@ class Po(pygame.sprite.Sprite):
         #     self.angle -= 360
         # if self.angle < 0:
         #     self.angle += 360
-        self.angle = vec(0,0).angle_to(pygame.mouse.get_pos()-self.tank.pos)*-1
-        self.image = pygame.transform.rotozoom(self.image_t, self.angle, 1)
-        self.image.set_colorkey((0, 0, 0))
-        self.rect = self.image.get_rect(center=self.pos)
+        if self.tank == self.game.tanks.sprites()[self.game.lock]:
+            self.angle = vec(0, 0).angle_to(pygame.mouse.get_pos() - self.tank.pos) * -1
+            self.image = pygame.transform.rotozoom(self.image_t, self.angle, 1)
+            self.image.set_colorkey((0, 0, 0))
+            self.rect = self.image.get_rect(center=self.pos)
+        if self.on_fire:
+            self.speed = (pygame.time.get_ticks() - self.t_time) / 100
 
-    def fire(self):
-        self.game.all_sprites.add(Bul(self.game, self.pos, self.color, self._layer + 1, self.tank, self.angle))
+    def fire(self, check):
+        if check:
+            self.t_time = pygame.time.get_ticks()
+            self.on_fire = True
+        if not check:
+            self.speed = (pygame.time.get_ticks() - self.t_time) / 100
+            self.game.all_sprites.add(
+                Bul(self.game, self.pos, self.color, self._layer + 1, self.tank, self.angle, self.speed))
+            self.on_fire = False
 
 
 class Bul(pygame.sprite.Sprite):
-    def __init__(self, root, pos, color, layer, tankt, angle):
+    def __init__(self, root, pos, color, layer, tankt, angle, speed):
         a = vec(1, 0)
         self.game = root
         self.tank = tankt
@@ -129,7 +144,7 @@ class Bul(pygame.sprite.Sprite):
         self.angle = angle
         self.pos = pos
         self.vel = a.rotate(self.angle * -1)
-        self.speed = 5
+        self.speed = speed
         self.gravity = GRAVITY
         self.rect = self.image.get_rect(center=pos)
         self._layer = layer
@@ -160,19 +175,20 @@ class UI(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.image)
         self.t1_health = self.game.tanks.sprites()[0].move_p
         self.t2_health = self.game.tanks.sprites()[1].move_p
-
-
+        self.po_speed = self.game.tanks.sprites()[0].po.speed
 
     def update(self):
         self.image.fill('Black')
         self.image.set_colorkey('Black')
-        pygame.draw.rect(self.image, 'Gray', (10,10, SCREEN_X-20, SCREEN_Y-20), 10, 40)
-        self.image.set_colorkey('Black')
+        pygame.draw.rect(self.image, 'Gray', (10, 10, SCREEN_X - 20, SCREEN_Y - 20), 10, 40)
         self.t1_health = self.game.tanks.sprites()[0].move_p
         self.t2_health = self.game.tanks.sprites()[1].move_p
-        pygame.draw.line(self.image, 'Red', (50, 50), (self.t1_health*4+50, 50), 10)
-        pygame.draw.line(self.image, 'Red', (SCREEN_X-50, 50), (SCREEN_X-(self.t2_health * 4  50), 50), 10)
-
+        self.po_speed = self.game.tanks.sprites()[self.game.lock].po.speed
+        pygame.draw.line(self.image, 'Blue', (50, 50), (400 + 50, 50), 15)
+        pygame.draw.line(self.image, 'Red', (50, 50), (self.t1_health * 4 + 50, 50), 10)
+        pygame.draw.line(self.image, 'Blue', (SCREEN_X - 50, 50), (SCREEN_X - (400 + 50), 50), 10)
+        pygame.draw.line(self.image, 'Red', (SCREEN_X - 50, 50), (SCREEN_X - (self.t2_health * 4 + 50), 50), 10)
+        pygame.draw.line(self.image, 'Blue', (50, SCREEN_Y - 50), (50 + self.po_speed * 50, SCREEN_Y - 50), 10)
 
 
 class Game:
@@ -187,11 +203,12 @@ class Game:
         self.pressed_key = pygame.key.get_pressed()
         for _ in range(PLAYER_NUMBER):
             self.tanks.add(
-                Tank(self, vec(random.randint(0,SCREEN_X), 0), (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)), 2))
+                Tank(self, vec(random.randint(0, SCREEN_X), 0),
+                     (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)), 2))
 
         self.all_sprites.add(x for x in self.tanks)
         self.ui = pygame.sprite.GroupSingle()
-        self.ui.add(UI(self,100))
+        self.ui.add(UI(self, 100))
         self.land = Land(self, 0)
         self.all_sprites.add(self.land)
         self.lock = 0
@@ -215,7 +232,10 @@ class Game:
                 self.playing = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_a:
-                    self.tanks.sprites()[self.lock].po.fire()
+                    self.tanks.sprites()[self.lock].po.fire(True)
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_a:
+                    self.tanks.sprites()[self.lock].po.fire(False)
                     self.lock += 1
                     if self.lock > PLAYER_NUMBER - 1:
                         self.lock = 0
@@ -228,7 +248,7 @@ class Game:
 
     def draw(self):
         self.screen.fill('Black')
-        self.screen.blit(self.bg, (0,0))
+        self.screen.blit(self.bg, (0, 0))
         self.all_sprites.draw(self.screen)
         self.ui.draw(self.screen)
 

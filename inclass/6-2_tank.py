@@ -86,12 +86,10 @@ class Po(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center=self.pos)
 
     def fire(self, check):
-        print(check)
         if check:
             self.t_time = pygame.time.get_ticks()
         if not check:
             self.speed = (pygame.time.get_ticks()-self.t_time)/100
-            print(self.speed)
             self.game.all_sprites.add(Bul(self.game, self.pos, self.color, self._layer +1, self.tank, self.angle, self.speed))
 
 
