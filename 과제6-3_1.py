@@ -31,7 +31,7 @@ class Ball(pygame.sprite.Sprite):
     def update(self):
         self.gravi()
         self.vel -= self.gravity
-        if self.vel.length() > 30:
+        if self.vel.length() > 20:
             self.devide()
         self.pos += self.vel
         self.rect.center = self.pos
@@ -72,9 +72,11 @@ class Ball(pygame.sprite.Sprite):
 
     def devide(self):
         self.vel = self.vel / 2
-        self.mass = self.mass /2
-        self.size = self.size/(2)**(1/2)
-        self.game.all_sprites.add(Ball(self.game, self.pos.x-self.size*2, self.pos.y-self.size*2, self.vel* -1, self.size))
+        self.mass = self.mass / 2
+        self.size = self.size / 2 ** (1 / 2)
+        self.game.all_sprites.add(
+            Ball(self.game, self.pos.x - self.size * 2, self.pos.y - self.size * 2, self.vel * -1, self.size))
+
 
 class Game:
     def __init__(self):
