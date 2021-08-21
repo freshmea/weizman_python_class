@@ -97,7 +97,7 @@ class Bul(pygame.sprite.Sprite):
         self.game = root
         self.tank = tankt
         self.groups = self.game.all_sprites
-        self.image = pygame.Surface((5, 5))
+        self.image = pygame.Surface((25, 25))
         self.color = color
         self.image.fill(self.color)
         self.angle = angle
@@ -113,6 +113,7 @@ class Bul(pygame.sprite.Sprite):
         self.vel.y += self.gravity
         self.pos += self.vel * self.speed
         self.rect.center = self.pos
+        print(self.vel)
         if self.pos.y > SCREEN_Y:
             self.kill()
             del self

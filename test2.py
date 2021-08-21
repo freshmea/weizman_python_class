@@ -1,117 +1,92 @@
-# 파이게임 기본 코드
-import pygame
-import random
+import random, time
+
+import keyboard
 
 
-def rotcenter(image, angle):
-    return pygame.transform.rotate(image, angle)
+class Luck:
+    def __init__(self):
+        self.luck_list = [['참 운이 좋은 ', '나쁠수도 있고 좋을수도 있는', '좋지 않은', '그냥 그런', '조심해야 할', '아주 나쁜'],
+                          ['다만 ', '그러나 ', '항상 ', '하지만 ', '그리고 '],
+                          [' 투자를 신경써야', '아주 나쁜일을 대비해야', '하루 종일 기분을 마음껏 뽐내셔야', '자신의 신념을 버리지 말아야', '제대로 긴장해야'],
+                          ['욕심을 버려야 하는', '재물운이 높은', '사랑운이 치솟는', '생명운이 올라가는', '운명이 닥치는', '지능운이 탁월히 높게 올라가는']]
+        self.chinese_zodiac_sign_list = ['쥐', '소', '범', '토끼', '용', '뱀', '말', '양', '원숭이', '닭', '개', '돼지']
+        self.chinese_zodiac_sign = None
+        self.chinese_zodiac_sign_num = [random.randint(1, 4), random.randint(1, 4), random.randint(1, 4),
+                                        random.randint(1, 4),
+                                        random.randint(1, 4), random.randint(1, 4), random.randint(1, 4),
+                                        random.randint(1, 4),
+                                        random.randint(1, 4), random.randint(1, 4), random.randint(1, 4),
+                                        random.randint(1, 4),
+                                        random.randint(1, 4)]
+        self.luck_string = str()
+        self.chinese_zodiac_sign_minus = 0
+        self.y = ['1950년 이하:', '1950 ~ 1980:', '1980 ~ 1990:', '1990 ~ 2000:', '그 이상:']
 
 
-pygame.init()
-pygame.display.set_caption('게임 제목')
-Screen_x = 640 * 2  # 화면 넓이
-Screen_y = 480 * 2  # 화면 높이
-GRAVITY = 0.3
-screen = pygame.display.set_mode((Screen_x, Screen_y))  # 화면 세팅
-clock = pygame.time.Clock()  # 시계 지정
+    def radnom_luck(self):
+        for i in range(5):
+            self.chinese_zodiac_sign_minus = self.chinese_zodiac_sign_num[self.chinese_zodiac_sign_list.index
+            (self.chinese_zodiac_sign)]
+            print('\n')
+            self.luck_string = self.luck_list[0][random.randint(0, 6 - self.chinese_zodiac_sign_minus)] + '날 입니다.' + \
+                               self.luck_list[1][random.randint(0, 5 - self.chinese_zodiac_sign_minus)] \
+                               + \
+                               self.luck_list[2][random.randint(0, 5 - self.chinese_zodiac_sign_minus)] + '합니다. ' + \
+                               self.luck_list[3][random.randint(0, 6 - self.chinese_zodiac_sign_minus)] \
+                               + \
+                               '날 이기도 합니다. (다른 출생년도의 운세를 보시려면 z키를 눌러주세요)'
+            print(self.y[i] + self.luck_string)
+            while True:
+                if keyboard.read_key() == 'z':
+                    break
 
-playing = True
-
-
-class Figure(pygame.sprite.Sprite):
-    def __init__(self, root):
-        self.game = root
-        self.image = pygame.Surface((20, 70))
-        self.image.fill((255, 0, 0))
-        self.image_t = self.image
-        self.rect = self.image.get_rect()
-        self.groups = self.game.all_sprites
-        pygame.sprite.Sprite.__init__(self, self.groups)
-        self.pos = pygame.Vector2(random.randint(0, Screen_x), random.randint(0, Screen_y))
-        self.dir = pygame.Vector2(random.random() * 2 - 1, random.random() * 2 - 1)
-        self.speed = 10
-        self.rotate = 0
-
-    def update(self):
-        self.rotate += 1
-        self.image = pygame.transform.rotozoom(self.image_t, self.rotate, 1)
-        rotcenter(self.image, 90)
-        if self.game.pressed_key[pygame.K_SPACE]:
-
-            self.dir.y += GRAVITY
-            self.pos += self.dir * self.speed
-            if self.pos.y > Screen_y:
-                self.pos.y = Screen_y - 150
-            self.rect.center = self.pos
-
-        else:
-
-            self.pos += self.dir * self.speed
-            if self.pos.x > Screen_x:
-                self.dir = pygame.Vector2(random.random() * 2 - 1, random.random() * 2 - 1)
-            if self.pos.x < 0:
-                self.dir = pygame.Vector2(random.random() * 2 - 1, random.random() * 2 - 1)
-            if self.pos.y > Screen_y:
-                self.dir = pygame.Vector2(random.random() * 2 - 1, random.random() * 2 - 1)
-            if self.pos.y < 0:
-                self.dir = pygame.Vector2(random.random() * 2 - 1, random.random() * 2 - 1)
-            self.dir = self.dir.normalize()
-            self.rect.center = self.pos
-
-    def col(self):
-        self.dir = pygame.Vector2(random.random() * 2 - 1, random.random() * 2 - 1)
+    def chinese_zodiac_sign_test(self):
+        self.chinese_zodiac_sign = input('띠 입력(순서대로 쥐, 소, 범, 토끼, 용, 뱀, 말, 양, 원숭이, 닭, 개, 돼지)')
 
 
-# 파이게임 기본 코드(클래스)
-
-
-Screen_x = 640 * 2  # 화면 넓이
-Screen_y = 480 * 2  # 화면 높이
+l = Luck()
 
 
 class Game:
     def __init__(self):
-        pygame.init()
-        pygame.display.set_caption('화면 보호기(?)')
-        self.screen = pygame.display.set_mode((Screen_x, Screen_y))  # 화면 세팅
-        self.clock = pygame.time.Clock()  # 시계 지정
-        self.playing = True
+        self.text = ['version: 2.0', 'By ziwootv', 'Youtube YOOZIWOOTV', 'NAVER ZIWOOS', 'SCRATCH jiwootv', '''오늘의 운세 
+        나올수 있는 운세 경우 900종류!!!
+        엄청난 운세프로그램!''', '다만 운세는 재미로 보는 것이니, 자신에게 맞지 않는 결과가 나와도 뭐라 하지 마세요.',
+                     '운세가 맞을 수도 있지만, 또 그렇다고 100% 맞아떨어지는 것은 아닌게 운세니까요.']
+        self.load = 0
 
-        self.all_sprites = pygame.sprite.Group()
-        self.figure = Figure(self)
-        for i in range(20):
-            self.all_sprites.add(Figure(self))
+    def start(self):
+        Luck.chinese_zodiac_sign_test(l)
+        Luck.radnom_luck(l)
+        time.sleep(1)
+        print('오늘의 운세 잘 아셨죠? 내일 다시 시도해 보세요!')
+        time.sleep(2)
+        print('오늘의 운세를 다 읽으셨다면 X키를 눌러 프로그램을 종료하거나, 종료 버튼(×)를 눌러 종료해 주세요.')
+        import keyboard
+        if keyboard.read_key() == 'X':
+            print('3초후 자동종료합니다.')
+            for i in range(3):
+                print(4 - i)
+                time.sleep(1)
+            time.sleep(2)
+            print('종료합니다.')
 
-#        self.bomb = pygame.mixer.Sound('18.wav')
+    def textprint(self, dlay):
+        for num in range(len(self.text)):
+            print(self.text[num])
+            time.sleep(dlay)
 
-    def run(self):
-        while self.playing:
-            self.clock.tick(60)
-            self.event()
-            self.update()
-            self.draw()
-            pygame.display.update()
-
-    def event(self):
-        self.pressed_key = pygame.key.get_pressed()
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                self.playing = False
-        for figure in self.all_sprites:
-            re = pygame.sprite.spritecollide(figure, self.all_sprites, False)
-            for a in re:
-                if not figure == a:
-#                    pygame.mixer.Sound.play(self.bomb)
-                    pass
-
-    def update(self):
-        self.all_sprites.update()
-
-    def draw(self):
-        self.screen.fill((0, 0, 0))
-        self.all_sprites.draw(self.screen)
+    def print(self):
+        for i in range(100):
+            print(f'loading...({i + 1}% 완료)')
+            self.load = i
+            if random.randint(1, 2) == 1:
+                time.sleep(0.2)
+            else:
+                time.sleep(0)
+        self.textprint(0.5)
 
 
-game = Game()
-game.run()
-pygame.quit()
+g = Game()
+Game.print(g)
+Game.start(g)

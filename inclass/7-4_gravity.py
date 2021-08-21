@@ -33,9 +33,10 @@ class Ball(pygame.sprite.Sprite):
         self.vel -= self.gravity
         # self.vel -= (self.pos-vec(SCREEN_X/2, SCREEN_Y/2)).normalize()*(self.pos-vec(SCREEN_X/3*2, SCREEN_Y/2)).length()*(self.pos-vec(SCREEN_X/3*2, SCREEN_Y/2)).length()/100000
         if self.vel.length()>30:
-            self.kill()
-            del self
-            return
+            self.vel = self.vel/2
+            # self.kill()
+            # del self
+            # return
         self.pos += self.vel
         self.rect.center = self.pos
         if self.pos.x > SCREEN_X:
@@ -61,7 +62,7 @@ class Ball(pygame.sprite.Sprite):
 
     def collide(self):
         for other in self.game.all_sprites:
-            if not (self == other or other == self.game.bball1 or other == self.game.bball2):
+            if not (self == other ):
                 if self.rect.colliderect(other):
                     self.size = (self.size*self.size+other.size*other.size)**0.5
                     self.image = pygame.Surface((self.size * 2, self.size * 2))
@@ -103,9 +104,9 @@ class Game:
         self.clock = pygame.time.Clock()  # 시계 지정
         self.playing = True
         self.all_sprites = pygame.sprite.Group()
-        self.bball1 = Bball(self, SCREEN_X/3 , SCREEN_Y/2, vec(0,0))
-        self.bball2 = Bball(self, SCREEN_X/3*2 , SCREEN_Y/2, vec(0,0))
-        self.all_sprites.add(self.bball1, self.bball2)
+        # self.bball1 = Bball(self, SCREEN_X/3 , SCREEN_Y/2, vec(0,0))
+        # self.bball2 = Bball(self, SCREEN_X/3*2 , SCREEN_Y/2, vec(0,0))
+        # self.all_sprites.add(self.bball1, self.bball2)
 
 
     def run(self):
@@ -118,7 +119,7 @@ class Game:
 
     def event(self):
         # 종료 코드
-        if len(self.all_sprites)<6:
+        if len(self.all_sprites)<16:
             self.all_sprites.add(Ball(self, random.randint(0, SCREEN_X), random.randint(0, SCREEN_Y), vec(-1, 0)))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
