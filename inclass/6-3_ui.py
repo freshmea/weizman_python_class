@@ -22,7 +22,7 @@ class Ui(pygame.sprite.Sprite):
         pygame.draw.rect(self.image, 'Gray', (10,10, SCREEN_X-20, SCREEN_Y-20), 10, 10)
         self.ui_health = self.game.sa.health
         pygame.draw.line(self.image, 'Red', (100, SCREEN_Y-100), (100+self.ui_health*3, SCREEN_Y-100), 15)
-        self.draw_text(f'게임을 플레이해 주셔서 감사합니다.', 30, pygame.Color('Red'), 100, SCREEN_Y * 3 / 20)
+        self.draw_text(f'체력: {self.ui_health}', 30, pygame.Color('Red'), 100, SCREEN_Y -100)
 
     def draw_text(self, text, size, color, x, y):
         font = pygame.font.SysFont('malgungothic', size)
