@@ -1,4 +1,7 @@
-# # 파이게임 기본(클래스)
+# # 이 게임에 UI 를 추가해서 넣어보세요.
+# UI 에 사각형 틀 추가하기
+# 체력바를 만들어서 ball의 전체 mass 량을 표현하기
+# 글자 넣기
 
 import pygame
 import random
@@ -25,13 +28,11 @@ class Ball(pygame.sprite.Sprite):
         self.mass = 10
         self.gravity = vec(0, 0)
 
-
-
     def update(self):
         self.gravi()
         self.vel -= self.gravity
-        if self.vel.length()>30:
-            self.vel = self.vel/2
+        if self.vel.length() > 30:
+            self.vel = self.vel / 2
         self.pos += self.vel
         self.rect.center = self.pos
         if self.pos.x > SCREEN_X:
@@ -49,35 +50,35 @@ class Ball(pygame.sprite.Sprite):
             if not ball == self:
                 try:
                     dis = (self.pos - ball.pos).length()
-                    dir = (self.pos - ball.pos).normalize()
-                    self.gravity += dir * self.mass * ball.mass / (dis * dis)
+                    direc = (self.pos - ball.pos).normalize()
+                    self.gravity += direc * self.mass * ball.mass / (dis * dis)
                 except:
                     pass
 
     def collide(self):
         for other in self.game.all_sprites:
-            if not (self == other ):
+            if not (self == other):
                 if self.rect.colliderect(other):
-                    self.size = (self.size*self.size+other.size*other.size)**0.5
+                    self.size = (self.size * self.size + other.size * other.size) ** 0.5
                     self.image = pygame.Surface((self.size * 2, self.size * 2))
                     pygame.draw.circle(self.image, 'Red', (self.size, self.size), self.size)
                     self.image.set_colorkey((0, 0, 0))
                     self.rect = self.image.get_rect()
                     self.mass += other.mass
-                    self.vel = (self.vel*self.mass+other.vel*other.mass)/(self.mass+other.mass)
+                    self.vel = (self.vel * self.mass + other.vel * other.mass) / (self.mass + other.mass)
                     other.kill()
                     del other
                     return True
 
+
 class Game:
     def __init__(self):
         pygame.init()
-        pygame.display.set_caption('게임 제목')
+        pygame.display.set_caption('흡수하는 볼')
         self.screen = pygame.display.set_mode((SCREEN_X, SCREEN_Y))  # 화면 세팅
         self.clock = pygame.time.Clock()  # 시계 지정
         self.playing = True
         self.all_sprites = pygame.sprite.Group()
-
 
     def run(self):
         while self.playing:
@@ -89,7 +90,7 @@ class Game:
 
     def event(self):
         # 종료 코드
-        if len(self.all_sprites)<16:
+        if len(self.all_sprites) < 16:
             self.all_sprites.add(Ball(self, random.randint(0, SCREEN_X), random.randint(0, SCREEN_Y), vec(-1, 0)))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

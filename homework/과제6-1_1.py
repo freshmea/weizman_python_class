@@ -81,9 +81,9 @@ class Game:
         self.clock = pygame.time.Clock()  # 시계 지정
         self.playing = True
         self.all_sprites = pygame.sprite.Group()
-        self.bomb = pygame.mixer.Sound('wave/2001_key1.mp3')
+        self.bomb = pygame.mixer.Sound('../wave/2001_key1.mp3')
         self.bomb.set_volume(0.1)
-        self.back = pygame.image.load('images/starfalling.jpg')
+        self.back = pygame.image.load('../images/starfalling.jpg')
         self.back = pygame.transform.scale(self.back, (SCREEN_X, SCREEN_Y))
 
     def run(self):
