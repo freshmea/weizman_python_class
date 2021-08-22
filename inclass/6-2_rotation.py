@@ -9,53 +9,53 @@ FPS = 60
 class Sa(pygame.sprite.Sprite):
     def __init__(self, root):
         self.game = root
-        #self.image = pygame.Surface((200, 50))
         self.image = pygame.image.load('../png/tank.png')
         self.image = pygame.transform.scale(self.image, (800, 400))
-        #self.image.fill('Red')
-        self.image_t = self.image
-        self.rect = self.image.get_rect()
+        self.rect = self.image.get_rect(center=(SCREEN_X/2, SCREEN_Y * 8 / 10))
         self.groups = self.game.all_sprites
         pygame.sprite.Sprite.__init__(self, self.groups)
-        self.rect.centerx = SCREEN_X/2
-        self.rect.centery = SCREEN_Y * 8 / 10
-        self.angle = 0
-        self.mask = self.image.get_masks()
+        self.mask = pygame.mask.from_surface(self.image)
         self.pos = pygame.math.Vector2(0,0)
 
     def update(self):
-        #self.angle += 1
-        self.image = pygame.transform.rotozoom(self.image_t, self.angle, 1)
-        self.image.set_colorkey((0, 0, 0))
-        self.rect = self.image.get_rect()
         self.pos.x += 8
         if self.pos.x > SCREEN_X:
             self.pos.x = 0
-        self.pos.y = SCREEN_Y * 8 / 10
-        self.rect.center = self.pos
+        self.rect.centerx = self.pos.x
 
 
-class Rain:
+
+class Rain(pygame.sprite.Sprite):
     def __init__(self, x, y, root):
-        self.x = x
-        self.y = y
         self.speed = random.randint(5, 28)
         self.bold = random.randint(1, 4)
         self.game = root
         self.len = random.randint(5, 15)
         self.color = pygame.Color('skyblue')
         self.red = random.randint(0, 100)
+        self.groups = self.game.rains
+        pygame.sprite.Sprite.__init__(self, self.groups)
+        self.image = pygame.Surface((self.bold, self.len))
+        self.image.fill(self.color)
+        if self.red == 0:
+            self.image.fill('Red')
+        self.rect = self.image.get_rect(topleft=(x,y))
+        self.mask = pygame.mask.from_surface(self.image)
 
-    def move(self):
-        self.y += self.speed
+    def update(self):
+        if pygame.sprite.collide_mask(self, self.game.sa):
+            self.kill()
+            del self
+            return
+        self.rect.y += self.speed
+        if self.off_screen():
+            self.kill()
+            del self
+            return
+
 
     def off_screen(self):
-        return self.y > SCREEN_Y + 20
-
-    def draw(self):
-        pygame.draw.line(self.game.screen, self.color, (self.x, self.y), (self.x, self.y + self.len), self.bold)
-        if self.red == 0:
-            pygame.draw.line(self.game.screen, pygame.Color('red'), (self.x, self.y), (self.x, self.y + self.len), self.bold)
+        return self.rect.y > SCREEN_Y + 20
 
 
 class Game:
@@ -67,7 +67,7 @@ class Game:
         self.playing = True
         self.all_sprites = pygame.sprite.Group()
         self.sa = Sa(self)
-        self.rains = []
+        self.rains = pygame.sprite.Group()
 
     def run(self):
         while self.playing:
@@ -82,21 +82,18 @@ class Game:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.playing = False
-        self.rains.append(Rain(random.randint(0, SCREEN_X) , 100 , self))
+        self.rains.add(Rain(random.randint(0, SCREEN_X) , 100 , self))
+        for _ in self.rains:
+            _.rect.x -= 1
 
     def update(self):
         self.all_sprites.update()
-        for rain in self.rains:
-            rain.move()
-            if rain.off_screen():
-                self.rains.remove(rain)
-                del rain
+        self.rains.update()
 
     def draw(self):
         self.screen.fill((255, 255, 255))
         self.all_sprites.draw(self.screen)
-        for rain in self.rains:
-            rain.draw()
+        self.rains.draw(self.screen)
 
 
 
