@@ -53,7 +53,6 @@ class Rain(pygame.sprite.Sprite):
             del self
             return
 
-
     def off_screen(self):
         return self.rect.y > SCREEN_Y + 20
 
@@ -83,8 +82,6 @@ class Game:
             if event.type == pygame.QUIT:
                 self.playing = False
         self.rains.add(Rain(random.randint(0, SCREEN_X) , 100 , self))
-        for _ in self.rains:
-            _.rect.x -= 1
 
     def update(self):
         self.all_sprites.update()
