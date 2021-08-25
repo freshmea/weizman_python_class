@@ -1,3 +1,7 @@
+# 좌우 방향키를 눌러서 화면이 움직이게 하는 코드를 찾아서 주석을 달아 보세요.
+# 캐릭터의 움직임과 화면의 움직임 그리고 UI 의 움직임이 어떻게 되는지 코드를 자세히 살펴 보세요.
+
+
 import pygame
 import random
 
@@ -35,7 +39,7 @@ class Ui(pygame.sprite.Sprite):
 class Sa(pygame.sprite.Sprite):
     def __init__(self, root):
         self.game = root
-        self.image = pygame.image.load('../png/tank.png')
+        self.image = pygame.image.load('png/tank.png')
         self.image = pygame.transform.scale(self.image, (800, 400))
         self.rect = self.image.get_rect(center=(SCREEN_X/2, SCREEN_Y * 8 / 10))
         self.groups = self.game.all_sprites
