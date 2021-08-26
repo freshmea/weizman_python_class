@@ -6,7 +6,7 @@ import cmath
 
 vec = pygame.Vector2
 # 전역상수
-SCREEN_X = 640 * 2  # 화면 넓이
+SCREEN_X = 640 * 3  # 화면 넓이
 SCREEN_Y = 480 * 2  # 화면 높이
 FPS = 60
 
@@ -15,7 +15,8 @@ class Ball(pygame.sprite.Sprite):
     def __init__(self, root, x, y, vel):
         self.size = 5
         self.image = pygame.Surface((self.size * 2, self.size * 2))
-        pygame.draw.circle(self.image, 'Red', (self.size, self.size), self.size)
+        self.color = (random.randint(0,255), random.randint(0,255), random.randint(0,255))
+        pygame.draw.circle(self.image, self.color, (self.size, self.size), self.size)
         self.image.set_colorkey((0, 0, 0))
         self.rect = self.image.get_rect()
         self.game = root
@@ -66,7 +67,7 @@ class Ball(pygame.sprite.Sprite):
                 if self.rect.colliderect(other):
                     self.size = (self.size*self.size+other.size*other.size)**0.5
                     self.image = pygame.Surface((self.size * 2, self.size * 2))
-                    pygame.draw.circle(self.image, 'Red', (self.size, self.size), self.size)
+                    pygame.draw.circle(self.image, (random.randint(0,255), random.randint(0,255), random.randint(0,255)), (self.size, self.size), self.size)
                     self.image.set_colorkey((0, 0, 0))
                     self.rect = self.image.get_rect()
                     self.mass += other.mass

@@ -97,7 +97,7 @@ class Rain(pygame.sprite.Sprite):
 class Game:
     def __init__(self):
         pygame.init()
-        pygame.display.set_caption('게임 제목')
+        pygame.display.set_caption('붉은 비 피하기 게임')
         self.screen = pygame.display.set_mode((SCREEN_X, SCREEN_Y))  # 화면 세팅
         self.clock = pygame.time.Clock()  # 시계 지정
         self.playing = True
