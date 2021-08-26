@@ -35,9 +35,8 @@ font_default = pygame.font.Font(None, 28)
 SPEED = 1 # must int
 KEYINTERVAL = 5
 cscore = 0
-max_bullet = 60
+max_bullet = 50
 break_bullet = 10
-vec = pygame.math.Vector2
 
 #sound
 soundkid = pygame.mixer.music.load('img/bgmusic.wav')
@@ -53,6 +52,9 @@ def main(argv):
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     # window titlebar
     pygame.display.set_caption('Dodge ' + VERSION)
+    # fps
+    fps_clock = pygame.time.Clock()
+    fps_clock.tick(FPS)
     # start_game
     main_loop()
 
@@ -115,9 +117,6 @@ def play_game():
 
     pygame.mixer.music.play(-1)
     while True:
-        # fps
-        fps_clock = pygame.time.Clock()
-        fps_clock.tick(FPS)
         screen.fill(BLACK)
         draw_text('{0} points'.format(cscore), font_default, screen,
                 WIDTH/1.1, 20, DARK_ORANGE, None)
@@ -126,6 +125,14 @@ def play_game():
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 keys = pygame.key.get_pressed()
+                if keys[pygame.K_UP]:
+                    airplane.move_position(0, -1 * SPEED)
+                if keys[pygame.K_DOWN]:
+                    airplane.move_position(0, 1 * SPEED)
+                if keys[pygame.K_RIGHT]:
+                    airplane.move_position(1 * SPEED, 0)
+                if keys[pygame.K_LEFT]:
+                    airplane.move_position(-1 * SPEED, 0)
                 if keys[pygame.K_ESCAPE]:
                     return GAMEOVER
             elif event.type == pygame.QUIT:
@@ -136,19 +143,6 @@ def play_game():
 
         if len(bullets) < max_bullet:
             bullets.add(random_bullet())
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_UP]:
-            for spr in bullets:
-                spr.rect.y += 1
-        if keys[pygame.K_DOWN]:
-            for spr in bullets:
-                spr.rect.y -= 1
-        if keys[pygame.K_RIGHT]:
-            for spr in bullets:
-                spr.rect.x -= 1
-        if keys[pygame.K_LEFT]:
-            for spr in bullets:
-                spr.rect.x += 1
         bullets.update()
         bullets.draw(screen)
         screen.blit(airplane.image, airplane.rect)
@@ -213,6 +207,14 @@ class AirPlane(pygame.sprite.Sprite):
         self.rect.x = x - self.centerx
         self.rect.y = y - self.centery
 
+    def move_position(self, x, y):
+        if (self.rect.x + x <= WIDTH - self.centerx*2) and \
+                (self.rect.x + x >= 0 ):
+            self.rect.x = self.rect.x + x
+        if (self.rect.y + y <= HEIGHT - self.centery*2) and \
+                (self.rect.y + y >= 0):
+            self.rect.y = self.rect.y + y
+
     def collide(self, sprites):
         for sprite in sprites:
             if pygame.sprite.collide_rect(self, sprite):
@@ -232,30 +234,34 @@ class Bullet(pygame.sprite.Sprite):
                 (self.centerx, self.centery), 5, 0)
         self.rect.x = xpos
         self.rect.y = ypos
-        self.speed = vec(xspeed, yspeed)
+        self.xspeed = xspeed
+        self.yspeed = yspeed
+        self.xthresh = 0
+        self.ythresh = 0
 
     def update(self):
-        self.rect.topleft += self.speed
-        print(self.rect, self.speed)
+        self.xthresh = self.xthresh + self.xspeed
+        if abs(self.xthresh) >= 1:
+            self.rect.x = self.rect.x + int(self.xthresh)
+            self.xthresh = self.xthresh - int(self.xthresh)
+        self.ythresh = self.ythresh + self.yspeed
+        if abs(self.ythresh) >= 1:
+            self.rect.y = self.rect.y + int(self.ythresh)
+            self.ythresh = self.ythresh - int(self.ythresh)
         if self.is_edge():
             global cscore
             cscore = cscore + 1
             self.kill()
-            del self
 
     def is_edge(self):
-        if self.rect.x > WIDTH-30:
-            self.rect.x = 30
-            return False
-        elif self.rect.x < 30:
-            self.rect.x = WIDTH-30
-            return False
-        if self.rect.y > HEIGHT-30:
-            self.rect.y = 30
-            return False
-        elif self.rect.y < 30:
-            self.rect.y = HEIGHT-30
-            return False
+        if self.rect.x > WIDTH:
+            return True
+        elif self.rect.x < 0:
+            return True
+        if self.rect.y > HEIGHT:
+            return True
+        elif self.rect.y < 0:
+            return True
         return False
 
 
@@ -265,24 +271,24 @@ def random_bullet():
     side = random.randint(1, 4)
     if side == 1: # TOP
         xpos = random.randint(0, WIDTH)
-        ypos = 40
-        xspeed = 1-random.random()*2
-        yspeed = 1-random.random()*2
+        ypos = 0
+        xspeed = random.uniform(-1, 1)
+        yspeed = random.uniform(0, 1)
     elif side == 2: # BOTTOM
         xpos = random.randint(0, WIDTH)
-        ypos = HEIGHT-40
-        xspeed = 1-random.random()*2
-        yspeed = 1-random.random()*2
+        ypos = HEIGHT
+        xspeed = random.uniform(-1, 1)
+        yspeed = random.uniform(-1, 0)
     elif side == 3: # RIGHT
-        xpos = WIDTH-40
+        xpos = WIDTH
         ypos = random.randint(0, HEIGHT)
-        xspeed = 1-random.random()*2
-        yspeed = 1-random.random()*2
+        xspeed = random.uniform(-1, 0)
+        yspeed = random.uniform(-1, 1)
     elif side == 4: # LEFT
-        xpos = 40
+        xpos = 0
         ypos = random.randint(0, HEIGHT)
-        xspeed = 1-random.random()*2
-        yspeed = 1-random.random()*2
+        xspeed = random.uniform(0, 1)
+        yspeed = random.uniform(-1, 1)
     return Bullet(xpos, ypos,
             xspeed / break_bullet, yspeed / break_bullet)
 
