@@ -160,12 +160,8 @@ class Game:
         self.screen.blit(self.bg, (0, 0))
         stop = True
         draw_text(self.screen, f'스페이스 바를 누르면 게임이 시작 됩니다.', 30, pygame.Color('red'), 100, SCREEN_Y * 1 / 20)
-        draw_text(self.screen, f'구름을 클릭하면 구름이 사라집니다.', 30, pygame.Color('black'), 100, SCREEN_Y * 2 / 20)
-        draw_text(self.screen, f'방향키로 공룡을 조작합니다.', 30, pygame.Color('black'), 100, SCREEN_Y * 3 / 20)
-        draw_text(self.screen, f'스페이스바를 누르면 점프 합니다.', 30, pygame.Color('black'), 100, SCREEN_Y * 4 / 20)
-        draw_text(self.screen, f'붉은 비를 많이 모으면 게임을 클리어 합니다.', 30, pygame.Color('black'), 100, SCREEN_Y * 5 / 20)
-        draw_text(self.screen, f'버섯을 먹으면 속도와 크기가 커집니다.', 30, pygame.Color('black'), 100, SCREEN_Y * 6 / 20)
-        draw_text(self.screen, f'q를 누르면 게임이 끝납니다.', 30, pygame.Color('black'), 100, SCREEN_Y * 7 / 20)
+        draw_text(self.screen, f'붉은 비를 피하세요.', 30, pygame.Color('black'), 100, SCREEN_Y * 2 / 20)
+        draw_text(self.screen, f'방향키로 탱크를 조작합니다.', 30, pygame.Color('black'), 100, SCREEN_Y * 3 / 20)
         pygame.display.flip()
         while stop:
             self.clock.tick(60)
