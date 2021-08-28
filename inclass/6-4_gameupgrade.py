@@ -63,14 +63,16 @@ class Rain(pygame.sprite.Sprite):
         self.bold = random.randint(1, 4)
         self.game = root
         self.len = random.randint(5, 15)
-        self.color = pygame.Color('skyblue')
+        self.color = pygame.Color('Blue')
         self.red = random.randint(0, 10)
+        if self.red == 0:
+            self.bold = 4
+            self.len = 15
+            self.color = pygame.Color('Red')
         self.groups = self.game.rains, self.game.all_sprites
         pygame.sprite.Sprite.__init__(self, self.groups)
         self.image = pygame.Surface((self.bold, self.len))
         self.image.fill(self.color)
-        if self.red == 0:
-            self.image.fill('Red')
         self.pos = vec(x, y)
         self.rect = self.image.get_rect(topleft=self.pos)
         self.mask = pygame.mask.from_surface(self.image)
@@ -131,7 +133,8 @@ class Game:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.playing = False
-        a = Rain(random.randint(0, SCREEN_X), 100, self)
+        for _ in range(10):
+            a = Rain(random.randint(0, SCREEN_X*10), 100, self)
         self.rains.add(a)
         self.all_sprites.add(a)
 
@@ -150,7 +153,7 @@ class Game:
 
     def draw(self):
         self.screen.fill((255, 255, 255))
-        for n in range(5):
+        for n in range(50):
             self.screen.blit(self.bg, (SCREEN_X * (n - 2) - self.bgcamera.x, 0))
         self.all_sprites.draw(self.screen)
         self.rains.draw(self.screen)
