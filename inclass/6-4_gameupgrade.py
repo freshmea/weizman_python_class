@@ -150,6 +150,8 @@ class Game:
         self.bgcamera += self.camera
         self.all_sprites.update()
         self.ui.update()
+        if self.sa.health < 0:
+            self.playing = False
 
     def draw(self):
         self.screen.fill((255, 255, 255))
