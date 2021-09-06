@@ -39,7 +39,7 @@ class Ui(pygame.sprite.Sprite):
 
 class Apple(pygame.sprite.Sprite):
     def __init__(self, root):
-        self.image = pygame.image.load('../png/apple.svg')
+        self.image = pygame.image.load('png/apple.svg')
         self.rect = self.image.get_rect()
         self.game = root
         self.groups = self.game.all_sprite
@@ -91,7 +91,7 @@ class Rotten(Apple):
 
 class Snake(pygame.sprite.Sprite):
     def __init__(self, root):
-        self.image = pygame.image.load('../png/snake-a.png')
+        self.image = pygame.image.load('png/snake-a.png')
         self.rect = self.image.get_rect()
         self.game = root
         self.groups = self.game.all_sprite, self.game.snakes
@@ -125,7 +125,7 @@ class Game:
         self.snakes.add(self.snake)
         self.all_sprite.add(self.snake)
         self.pressed_key = pygame.key.get_pressed()
-        self.bg = pygame.image.load('../png/BG/BG.png')
+        self.bg = pygame.image.load('png/BG/BG.png')
         self.bg = pygame.transform.scale(self.bg, (SCREEN_X, SCREEN_Y))
         self.ui = pygame.sprite.GroupSingle()
         self.ui.add(Ui(self))
