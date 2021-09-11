@@ -3,8 +3,8 @@
 import pygame, random
 
 # 전역상수
-SCREEN_X = 640 * 2  # 화면 넓이
-SCREEN_Y = 480 * 2  # 화면 높이
+SCREEN_X = 640 * 2  # 화면 넓이1920
+SCREEN_Y = 480 * 2  # 화면 높이1080
 FPS = 60
 GRAVITY = 0.3
 
