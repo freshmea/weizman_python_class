@@ -39,7 +39,7 @@ class Ui(pygame.sprite.Sprite):
 class Sa(pygame.sprite.Sprite):
     def __init__(self, root):
         self.game = root
-        self.image = pygame.image.load('png/tank.png')
+        self.image = pygame.image.load('../png/tank.png')
         self.image = pygame.transform.scale(self.image, (800, 400))
         self.rect = self.image.get_rect(center=(SCREEN_X/2, SCREEN_Y * 8 / 10))
         self.groups = self.game.all_sprites
